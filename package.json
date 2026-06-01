@@ -11,7 +11,8 @@
     "build": "vite build",
     "start": "NODE_ENV=production bun server/index.ts",
     "seed": "bun server/seed.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "dns": "bun scripts/setup-dns.ts"
   },
   "dependencies": {
     "react": "^19.2.0",
