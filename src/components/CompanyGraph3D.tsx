@@ -286,6 +286,18 @@ export default function CompanyGraph3D({
     } catch {}
   }, [focusId, theme]);
 
+  // Keep the renderer clear color synchronized with theme background updates
+  useEffect(() => {
+    const fg = fgRef.current;
+    if (!fg) return;
+    try {
+      const renderer = fg.renderer();
+      if (renderer) {
+        renderer.setClearColor(new THREE.Color(palette.bg), 1);
+      }
+    } catch {}
+  }, [palette.bg]);
+
   // Renderer + forces + bloom (after mount). Wait one frame for the lib to
   // attach forces and create the renderer.
   useEffect(() => {
