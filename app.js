@@ -1356,29 +1356,45 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
     
+    // Animate line dash offset for data pulses
+    if (!window.dashOffset3D) window.dashOffset3D = 0;
+    window.dashOffset3D -= 0.25;
+
     // Draw connections (depth sorted - back to front)
     connections.sort((a, b) => b.depth - a.depth);
     connections.forEach(conn => {
       const p = conn.parent;
       const c = conn.child;
       
-      const depthFactor = Math.max(0.1, Math.min(1.0, 1 - (conn.depth - 250) / 600));
-      const opacity = depthFactor * 0.25;
+      // Set high-visibility depthFactor with minimum 35% opacity
+      const depthFactor = Math.max(0.35, Math.min(1.0, 1 - (conn.depth - 250) / 600));
       
+      // Connection line style and colors matching the node sector for high visibility
+      const strokeColor = c.color;
+      const opacityGlow = depthFactor * (c.type === "sector" ? 0.6 : 0.4);
+      
+      // 1. Draw glowing background connecting line
       ctx3D.beginPath();
       ctx3D.moveTo(p.projX, p.projY);
       ctx3D.lineTo(c.projX, c.projY);
+      ctx3D.strokeStyle = strokeColor + Math.floor(opacityGlow * 255).toString(16).padStart(2,'0');
+      ctx3D.lineWidth = Math.max(1.5, (c.type === "sector" ? 3.5 : 1.8) * c.projScale / 2.5);
+      ctx3D.setLineDash([]);
+      ctx3D.stroke();
       
-      if (c.color === p.color) {
-        ctx3D.strokeStyle = `${c.color}${Math.floor(opacity*255).toString(16).padStart(2,'0')}`;
-      } else {
-        ctx3D.strokeStyle = isLightMode 
-          ? `rgba(75, 85, 99, ${opacity * 0.45})` 
-          : `rgba(255, 255, 255, ${opacity * 0.4})`;
-      }
-      ctx3D.lineWidth = Math.max(0.5, 1.2 * c.projScale / 2.5);
+      // 2. Draw animated scrolling data pulse core on top
+      ctx3D.beginPath();
+      ctx3D.moveTo(p.projX, p.projY);
+      ctx3D.lineTo(c.projX, c.projY);
+      ctx3D.strokeStyle = isLightMode ? strokeColor : "#ffffff";
+      ctx3D.lineWidth = Math.max(0.8, (c.type === "sector" ? 1.5 : 0.8) * c.projScale / 2.5);
+      ctx3D.setLineDash([8, 12]);
+      ctx3D.lineDashOffset = window.dashOffset3D * (c.type === "sector" ? 1.5 : 1.0);
       ctx3D.stroke();
     });
+
+    // Reset line dash so borders and text are solid
+    ctx3D.setLineDash([]);
     
     // Sort nodes by depth (back to front)
     const sortedNodes = [...nodes3D].sort((a, b) => b.depth - a.depth);
@@ -1387,12 +1403,14 @@ document.addEventListener("DOMContentLoaded", () => {
     sortedNodes.forEach(node => {
       const isHovered = (node === hoveredNode3D);
       const radius = Math.max(2, node.size * node.projScale / 2.5);
-      const depthFactor = Math.max(0.1, Math.min(1.0, 1 - (node.depth - 250) / 600));
+      
+      // Set high-visibility depthFactor with minimum 35% opacity
+      const depthFactor = Math.max(0.35, Math.min(1.0, 1 - (node.depth - 250) / 600));
       
       // Draw dynamic glowing aura
       ctx3D.beginPath();
-      ctx3D.arc(node.projX, node.projY, radius * (isHovered ? 2.5 : 1.6), 0, 2 * Math.PI);
-      ctx3D.fillStyle = node.color + Math.floor(depthFactor * (isHovered ? 60 : 25)).toString(16).padStart(2,'0');
+      ctx3D.arc(node.projX, node.projY, radius * (isHovered ? 2.5 : 1.8), 0, 2 * Math.PI);
+      ctx3D.fillStyle = node.color + Math.floor(depthFactor * (isHovered ? 85 : 40)).toString(16).padStart(2,'0');
       ctx3D.fill();
       
       // Center solid core circle
