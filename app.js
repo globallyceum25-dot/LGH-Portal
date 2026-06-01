@@ -1447,7 +1447,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ctx3D.stroke();
       
       // Monospace spatial labels
-      if (node.projScale > 0.85 || isHovered || node.type === "holding" || node.type === "sector") {
+      if (node.projScale > 0.35 || isHovered || node.type === "holding" || node.type === "sector") {
         const labelOpacity = Math.max(0, depthFactor * (isHovered ? 1.0 : (node.type === "holding" ? 0.95 : 0.65)) * nodeFadeMultiplier);
         if (labelOpacity > 0.1) {
           ctx3D.fillStyle = isLightMode 
