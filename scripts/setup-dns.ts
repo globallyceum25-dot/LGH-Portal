@@ -4,21 +4,48 @@ import { spawnSync } from "child_process";
 // Usage: CLOUDFLARE_API_TOKEN=xxx CLOUDFLARE_ZONE_ID=yyy bun scripts/setup-dns.ts
 
 const API_TOKEN = process.env.CLOUDFLARE_API_TOKEN;
-const ZONE_ID = process.env.CLOUDFLARE_ZONE_ID;
+let ZONE_ID = process.env.CLOUDFLARE_ZONE_ID;
 const RECORD_NAME = "portal.lgh.lk";
 
 async function main() {
   console.log("🌌 Lyceum DNS Connector");
   console.log("=======================");
 
-  if (!API_TOKEN || !ZONE_ID) {
-    console.error("❌ Error: Missing required environment variables.");
+  if (!API_TOKEN) {
+    console.error("❌ Error: Missing required environment variable CLOUDFLARE_API_TOKEN.");
     console.log("\nPlease run the script with the following variables:");
     console.log("  CLOUDFLARE_API_TOKEN  Your Cloudflare API Token (Edit zone permissions)");
-    console.log("  CLOUDFLARE_ZONE_ID    Your Cloudflare Zone ID for lgh.lk");
+    console.log("  CLOUDFLARE_ZONE_ID    (Optional) Your Cloudflare Zone ID for lgh.lk");
     console.log("\nExample:");
-    console.log("  CLOUDFLARE_API_TOKEN=xxxx CLOUDFLARE_ZONE_ID=yyyy bun scripts/setup-dns.ts\n");
+    console.log("  CLOUDFLARE_API_TOKEN=xxxx bun scripts/setup-dns.ts\n");
     process.exit(1);
+  }
+
+  // Auto-discover Zone ID if not provided
+  if (!ZONE_ID) {
+    console.log("🔍 Zone ID not provided. Attempting to discover Zone ID for lgh.lk...");
+    try {
+      const res = await fetch("https://api.cloudflare.com/client/v4/zones?name=lgh.lk", {
+        headers: {
+          Authorization: `Bearer ${API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = (await res.json()) as { success: boolean; result: any[]; errors: any[] };
+      if (data.success && data.result.length > 0) {
+        ZONE_ID = data.result[0].id;
+        console.log(`✅ Discovered Zone ID: ${ZONE_ID}`);
+      } else {
+        console.error("❌ Zone ID discovery failed.");
+        if (data.errors && data.errors.length > 0) {
+          console.error(`Reason: ${JSON.stringify(data.errors)}`);
+        }
+        process.exit(1);
+      }
+    } catch (err: any) {
+      console.error(`❌ Network error during Zone discovery: ${err.message}`);
+      process.exit(1);
+    }
   }
 
   // 1. Detect public IP address
