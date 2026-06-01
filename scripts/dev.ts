@@ -4,12 +4,14 @@
 const API_PORT = process.env.API_PORT ?? "3001";
 const WEB_PORT = process.env.PORT ?? "5173";
 
-const api = Bun.spawn(["bun", "--watch", "server/index.ts"], {
+const BUN = process.argv[0];
+
+const api = Bun.spawn([BUN, "--watch", "server/index.ts"], {
   stdio: ["inherit", "inherit", "inherit"],
   env: { ...process.env, PORT: API_PORT },
 });
 
-const web = Bun.spawn(["bunx", "vite", "--port", WEB_PORT], {
+const web = Bun.spawn([BUN, "x", "vite", "--port", WEB_PORT], {
   stdio: ["inherit", "inherit", "inherit"],
   env: { ...process.env, PORT: WEB_PORT },
 });
