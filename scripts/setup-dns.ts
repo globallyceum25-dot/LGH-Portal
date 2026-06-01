@@ -48,25 +48,31 @@ async function main() {
     }
   }
 
-  // 1. Detect public IP address
-  console.log("🔍 Fetching current public IP address...");
-  let publicIp = "";
-  try {
-    const res = await fetch("https://api.ipify.org?format=json");
-    if (!res.ok) throw new Error();
-    const data = (await res.json()) as { ip: string };
-    publicIp = data.ip;
-    console.log(`✅ Detected public IP: ${publicIp}`);
-  } catch {
-    console.error("❌ Failed to automatically detect public IP address.");
-    console.log("Attempting backup ip fetch...");
+  // 1. Detect public IP address or use custom IP
+  const CUSTOM_IP = process.env.CLOUDFLARE_IP;
+  let publicIp = CUSTOM_IP || "";
+
+  if (CUSTOM_IP) {
+    console.log(`✅ Using custom IP address: ${publicIp}`);
+  } else {
+    console.log("🔍 Fetching current public IP address...");
     try {
-      const res = await fetch("https://icanhazip.com");
-      publicIp = (await res.text()).trim();
-      console.log(`✅ Detected public IP (backup): ${publicIp}`);
+      const res = await fetch("https://api.ipify.org?format=json");
+      if (!res.ok) throw new Error();
+      const data = (await res.json()) as { ip: string };
+      publicIp = data.ip;
+      console.log(`✅ Detected public IP: ${publicIp}`);
     } catch {
-      console.error("❌ Could not determine public IP address. Please check your internet connection.");
-      process.exit(1);
+      console.error("❌ Failed to automatically detect public IP address.");
+      console.log("Attempting backup ip fetch...");
+      try {
+        const res = await fetch("https://icanhazip.com");
+        publicIp = (await res.text()).trim();
+        console.log(`✅ Detected public IP (backup): ${publicIp}`);
+      } catch {
+        console.error("❌ Could not determine public IP address. Please check your internet connection.");
+        process.exit(1);
+      }
     }
   }
 
