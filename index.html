@@ -204,8 +204,11 @@
                     <span class="spec-value" id="bento-spec-workforce">4,200 Experts</span>
                   </div>
                   <div class="spec-card">
-                    <span class="spec-label"><i data-lucide="globe"></i> EST. VALUE</span>
-                    <span class="spec-value" id="bento-spec-revenue">$1.45 Billion</span>
+                    <span class="spec-label"><i data-lucide="share-2"></i> SOCIAL MEDIA</span>
+                    <span class="spec-value" id="bento-spec-social" style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+                      <a href="#" id="bento-link-linkedin" target="_blank" class="social-icon-btn linkedin-btn" title="LinkedIn" style="color: #6366f1; display: inline-flex; transition: transform 0.2s;"><i data-lucide="linkedin" style="width: 16px; height: 16px;"></i></a>
+                      <a href="#" id="bento-link-twitter" target="_blank" class="social-icon-btn twitter-btn" title="Twitter / X" style="color: #6366f1; display: inline-flex; transition: transform 0.2s;"><i data-lucide="twitter" style="width: 16px; height: 16px;"></i></a>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -215,10 +218,10 @@
             <div class="bento-box box-double" id="bento-box-financials">
               <div class="box-header flex-header">
                 <div class="header-left">
-                  <i data-lucide="trending-up" class="box-icon icon-violet"></i>
-                  <h3>FINANCIAL HORIZON</h3>
+                  <i data-lucide="share-2" class="box-icon icon-violet"></i>
+                  <h3>SOCIAL MEDIA ENGAGEMENT</h3>
                 </div>
-                <span class="graph-indicator">REVENUE IN USD (MILLIONS)</span>
+                <span class="graph-indicator" id="bento-social-indicators">LINKEDIN: - // TWITTER: -</span>
               </div>
               <div class="box-body chart-wrapper">
                 <canvas id="bento-financial-chart"></canvas>
@@ -432,7 +435,7 @@
               <p id="detail-card-desc">Detailed company description...</p>
               <div class="detail-info-grid">
                 <div class="info-row">
-                  <span class="info-label">REVENUE:</span>
+                  <span class="info-label">FOLLOWERS:</span>
                   <span class="info-value" id="detail-card-rev">-</span>
                 </div>
                 <div class="info-row">
@@ -547,8 +550,8 @@
                       <input type="text" id="edit-comp-location" class="admin-input">
                     </div>
                     <div class="form-group">
-                      <label for="edit-comp-revenue">Revenue Metric</label>
-                      <input type="text" id="edit-comp-revenue" class="admin-input">
+                      <label for="edit-comp-linkedin">LinkedIn URL</label>
+                      <input type="text" id="edit-comp-linkedin" class="admin-input">
                     </div>
                   </div>
 

@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
     bentoCompDesc: document.getElementById("bento-comp-desc"),
     bentoLoc: document.getElementById("bento-spec-location"),
     bentoWorkforce: document.getElementById("bento-spec-workforce"),
-    bentoVal: document.getElementById("bento-spec-revenue"),
+    bentoSocial: document.getElementById("bento-spec-social"),
     bentoEsgAvg: document.getElementById("bento-esg-average"),
     bentoEsgCircle: document.getElementById("esg-progress-circle"),
     bentoEsgE: document.getElementById("bento-esg-e"),
@@ -377,7 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedEditCompany.name = document.getElementById("edit-comp-name").value;
         selectedEditCompany.tagline = document.getElementById("edit-comp-tagline").value;
         selectedEditCompany.location = document.getElementById("edit-comp-location").value;
-        selectedEditCompany.revenue = document.getElementById("edit-comp-revenue").value;
+        selectedEditCompany.linkedin = document.getElementById("edit-comp-linkedin").value;
         selectedEditCompany.employees = document.getElementById("edit-comp-employees").value;
         selectedEditCompany.website = document.getElementById("edit-comp-website").value;
         selectedEditCompany.profile = document.getElementById("edit-comp-profile").value;
@@ -831,6 +831,39 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // --- SOCIAL MEDIA UTILITY INTEGRATION ---
+  function getCompanySocials(company) {
+    if (!company.socials) {
+      const slug = company.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+      const employeeNum = parseInt((company.employees || "100").replace(/,/g, '')) || 100;
+      
+      // Dynamic follower counts
+      const linkedinFollowers = Math.floor(employeeNum * (12 + Math.random() * 5));
+      const twitterFollowers = Math.floor(linkedinFollowers * (0.4 + Math.random() * 0.2));
+      
+      company.socials = {
+        linkedin: company.linkedin || `https://www.linkedin.com/company/lyceum-${slug}`,
+        twitter: `https://x.com/lyceum_${slug}`,
+        linkedinFollowers: linkedinFollowers >= 1000 ? (linkedinFollowers/1000).toFixed(1) + "K" : linkedinFollowers.toString(),
+        twitterFollowers: twitterFollowers >= 1000 ? (twitterFollowers/1000).toFixed(1) + "K" : twitterFollowers.toString(),
+        growth: {
+          years: ["2022", "2023", "2024", "2025", "2026 (Est)"],
+          values: [
+            Math.floor(linkedinFollowers * 0.45),
+            Math.floor(linkedinFollowers * 0.60),
+            Math.floor(linkedinFollowers * 0.78),
+            Math.floor(linkedinFollowers * 0.90),
+            linkedinFollowers
+          ]
+        }
+      };
+    }
+    if (company.linkedin) {
+      company.socials.linkedin = company.linkedin;
+    }
+    return company.socials;
+  }
+
   // --- ENTERPRISE HELPER REGISTRIES ---
   function getCompanyContact(company) {
     if (!company.contact) {
@@ -895,8 +928,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Metadata details
     DOM.bentoLoc.textContent = company.location;
-    DOM.bentoWorkforce.textContent = `${parseInt(company.employees.replace(/,/g, '')).toLocaleString()} Experts`;
-    DOM.bentoVal.textContent = company.revenue;
+    DOM.bentoWorkforce.textContent = `${parseInt((company.employees || "100").replace(/,/g, '')).toLocaleString()} Experts`;
+
+    // Bind dynamic social media links
+    const socials = getCompanySocials(company);
+    const linkLinkedin = document.getElementById("bento-link-linkedin");
+    const linkTwitter = document.getElementById("bento-link-twitter");
+    if (linkLinkedin && linkTwitter) {
+      linkLinkedin.href = socials.linkedin;
+      linkTwitter.href = socials.twitter;
+    }
+
+    const indicatorEl = document.getElementById("bento-social-indicators");
+    if (indicatorEl) {
+      indicatorEl.innerHTML = `LINKEDIN: <span style="color: ${sector.color}; font-weight: bold;">${socials.linkedinFollowers}</span> // TWITTER: <span style="color: ${sector.color}; font-weight: bold;">${socials.twitterFollowers}</span>`;
+    }
 
     // Contact Info Binding
     const contact = getCompanyContact(company);
@@ -997,9 +1043,10 @@ document.addEventListener("DOMContentLoaded", () => {
       DOM.bentoLeaders.appendChild(card);
     });
 
-    // Render Chart.js dynamic dashboard graphics
+    // Render Chart.js dynamic dashboard graphics using followers growth dataset
     setTimeout(() => {
-      renderFinancialChart(company.financials, sector.color);
+      const socials = getCompanySocials(company);
+      renderFinancialChart(socials.growth, sector.color);
     }, 150);
   }
 
@@ -1023,7 +1070,7 @@ document.addEventListener("DOMContentLoaded", () => {
       data: {
         labels: chartData.years,
         datasets: [{
-          label: 'EBITDA / Valuation Progress',
+          label: 'Audience growth (Followers)',
           data: chartData.values,
           borderColor: themeColor,
           borderWidth: 2.5,
@@ -1091,7 +1138,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 weight: '600'
               },
               callback: function(value) {
-                return '$' + value + 'M'; // Prefix with dollar sign and Mill suffix
+                return value >= 1000 ? (value / 1000).toFixed(0) + 'K' : value.toString();
               }
             }
           }
@@ -1290,7 +1337,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (node.type === "holding") {
       classEl.textContent = "HOLDING CORPORATE OFFICE";
       locEl.textContent = "COLOMBO, SRI LANKA";
-      valEl.textContent = "$4.56 BILLION";
+      valEl.textContent = "245,000+ AUDIENCE";
     } else if (node.type === "sector") {
       classEl.textContent = "SECTOR LAYER DIVISION";
       locEl.textContent = "GLOBAL MARKET";
@@ -1303,7 +1350,7 @@ document.addEventListener("DOMContentLoaded", () => {
       classEl.style.color = node.color;
       classEl.style.textShadow = `0 0 10px ${node.color}40`;
       locEl.textContent = (node.originalData.location || "SRI LANKA").toUpperCase();
-      valEl.textContent = node.originalData.revenue || "-";
+      valEl.textContent = getCompanySocials(node.originalData).linkedinFollowers + " FOLLOWERS";
     }
   }
 
@@ -1588,7 +1635,7 @@ document.addEventListener("DOMContentLoaded", () => {
       logoContainer.innerHTML = `<span class="monospace" style="color: ${node.color}; font-size: 11px; font-weight: bold;">LGH</span>`;
       sectorEl.textContent = "GLOBAL PARENT CORP";
       descEl.textContent = "Lyceum Global Holdings is a diversified multi-sector conglomerate operating key physical and digital utility networks internationally.";
-      revEl.textContent = "$4.56 BILLION";
+      revEl.textContent = "245,000+ AUDIENCE";
       locEl.textContent = "COLOMBO, SRI LANKA";
       leadersEl.textContent = "BOARD OF DIRECTORS";
       appsEl.textContent = "ALL SYSTEM PORTALS";
@@ -1599,7 +1646,7 @@ document.addEventListener("DOMContentLoaded", () => {
       descEl.textContent = `Unified core directory managing high-performance holdings and asset structures in the ${node.label} sector.`;
       
       const companies = getCompanies()[node.id] || [];
-      revEl.textContent = "-";
+      revEl.textContent = "ACTIVE CHANNELS";
       locEl.textContent = "GLOBAL MARKET";
       leadersEl.textContent = "SECTOR MANAGERS";
       appsEl.textContent = `${companies.length} ACTIVE SUBSIDIARIES`;
@@ -1610,7 +1657,7 @@ document.addEventListener("DOMContentLoaded", () => {
       logoContainer.innerHTML = comp.logo ? `<img src="${comp.logo}" class="detail-logo-img" alt="Logo">` : `<span class="monospace" style="color: ${node.color}; font-size: 11px; font-weight: bold;">${comp.name.substring(0,2).toUpperCase()}</span>`;
       sectorEl.textContent = (sectorObj ? sectorObj.name : "SUBSIDIARY").toUpperCase();
       descEl.textContent = comp.description || "Active operations corporate network unit.";
-      revEl.textContent = comp.revenue || "-";
+      revEl.textContent = getCompanySocials(comp).linkedinFollowers + " (LinkedIn)";
       locEl.textContent = (comp.location || "SRI LANKA").toUpperCase();
       
       const leaderNames = comp.leaders ? comp.leaders.map(l => l.name.split(" ")[0]).join(", ") : "-";
@@ -1780,7 +1827,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("edit-comp-name").value = company.name || "";
     document.getElementById("edit-comp-tagline").value = company.tagline || "";
     document.getElementById("edit-comp-location").value = company.location || "";
-    document.getElementById("edit-comp-revenue").value = company.revenue || "";
+    document.getElementById("edit-comp-linkedin").value = company.linkedin || (company.socials ? company.socials.linkedin : "");
     document.getElementById("edit-comp-employees").value = company.employees || "";
     document.getElementById("edit-comp-website").value = company.website || "";
     document.getElementById("edit-comp-profile").value = company.profile || "";
