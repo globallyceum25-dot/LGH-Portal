@@ -1342,6 +1342,8 @@ document.addEventListener("DOMContentLoaded", () => {
       node.depth = projectedZ;
     });
     
+    const isLightMode = document.body.classList.contains("light-mode");
+
     // Connections array
     const connections = [];
     nodes3D.forEach(node => {
@@ -1370,7 +1372,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (c.color === p.color) {
         ctx3D.strokeStyle = `${c.color}${Math.floor(opacity*255).toString(16).padStart(2,'0')}`;
       } else {
-        ctx3D.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.4})`;
+        ctx3D.strokeStyle = isLightMode 
+          ? `rgba(75, 85, 99, ${opacity * 0.45})` 
+          : `rgba(255, 255, 255, ${opacity * 0.4})`;
       }
       ctx3D.lineWidth = Math.max(0.5, 1.2 * c.projScale / 2.5);
       ctx3D.stroke();
@@ -1394,20 +1398,30 @@ document.addEventListener("DOMContentLoaded", () => {
       // Center solid core circle
       ctx3D.beginPath();
       ctx3D.arc(node.projX, node.projY, radius, 0, 2 * Math.PI);
-      ctx3D.fillStyle = isHovered ? "#ffffff" : node.color + Math.floor(depthFactor * 255).toString(16).padStart(2,'0');
+      if (isHovered) {
+        ctx3D.fillStyle = isLightMode ? "#4f46e5" : "#ffffff";
+      } else {
+        ctx3D.fillStyle = node.color + Math.floor(depthFactor * 255).toString(16).padStart(2,'0');
+      }
       ctx3D.fill();
       
       // Border stroke
       ctx3D.lineWidth = isHovered ? 2 : 1;
-      ctx3D.strokeStyle = isHovered ? node.color : "rgba(255, 255, 255, " + (depthFactor * 0.3) + ")";
+      ctx3D.strokeStyle = isHovered 
+        ? node.color 
+        : (isLightMode 
+            ? "rgba(75, 85, 99, " + (depthFactor * 0.4) + ")" 
+            : "rgba(255, 255, 255, " + (depthFactor * 0.3) + ")");
       ctx3D.stroke();
       
       // Monospace spatial labels
       if (node.projScale > 0.85 || isHovered || node.type === "holding" || node.type === "sector") {
         const labelOpacity = Math.max(0, depthFactor * (isHovered ? 1.0 : (node.type === "holding" ? 0.95 : 0.65)));
         if (labelOpacity > 0.1) {
-          ctx3D.fillStyle = `rgba(255, 255, 255, ${labelOpacity})`;
-          ctx3D.font = `${node.type === "holding" ? "bold 10px" : (node.type === "sector" ? "8px" : "7px")} 'SFMono-Regular', Consolas, monospace`;
+          ctx3D.fillStyle = isLightMode 
+            ? `rgba(15, 23, 42, ${labelOpacity})` 
+            : `rgba(255, 255, 255, ${labelOpacity})`;
+          ctx3D.font = `${node.type === "holding" ? "bold 11px" : (node.type === "sector" ? "bold 9px" : "8px")} 'SFMono-Regular', Consolas, monospace`;
           ctx3D.textAlign = "center";
           ctx3D.fillText(node.label, node.projX, node.projY - radius - 6);
         }
