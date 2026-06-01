@@ -137,6 +137,16 @@ jobs:
           DEPLOY_SSH_KEY: ${{ secrets.STAGING_DEPLOY_SSH_KEY }}
           IMAGE_TAG: ${{ needs.docker.outputs.image_tag }}
         run: |
+          # ── Guard: skip if secrets are not configured ──
+          if [ -z "${DEPLOY_HOST}" ] || [ -z "${DEPLOY_SSH_KEY}" ]; then
+            echo "⏭️  Skipping staging deploy — SSH secrets not configured."
+            echo "   Configure these secrets in GitHub → Settings → Secrets:"
+            echo "     • STAGING_DEPLOY_HOST"
+            echo "     • STAGING_DEPLOY_USER"
+            echo "     • STAGING_DEPLOY_SSH_KEY"
+            exit 0
+          fi
+
           echo "🚀 Deploying to staging..."
           echo "   Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG}"
 
@@ -217,6 +227,16 @@ jobs:
           DEPLOY_SSH_KEY: ${{ secrets.PRODUCTION_DEPLOY_SSH_KEY }}
           IMAGE_TAG: ${{ needs.docker.outputs.image_tag }}
         run: |
+          # ── Guard: skip if secrets are not configured ──
+          if [ -z "${DEPLOY_HOST}" ] || [ -z "${DEPLOY_SSH_KEY}" ]; then
+            echo "⏭️  Skipping production deploy — SSH secrets not configured."
+            echo "   Configure these secrets in GitHub → Settings → Secrets:"
+            echo "     • PRODUCTION_DEPLOY_HOST"
+            echo "     • PRODUCTION_DEPLOY_USER"
+            echo "     • PRODUCTION_DEPLOY_SSH_KEY"
+            exit 0
+          fi
+
           echo "🚀 Deploying to production..."
           echo "   Image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${IMAGE_TAG}"
 
