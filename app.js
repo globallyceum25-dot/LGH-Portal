@@ -225,6 +225,34 @@ document.addEventListener("DOMContentLoaded", () => {
       close3DView();
     });
 
+    // --- THEME TOGGLE (LIGHT / DARK) ---
+    const themeToggleBtn = document.getElementById("btn-theme-toggle");
+    const themeLabel = themeToggleBtn.querySelector(".theme-label");
+
+    // Restore persisted theme preference
+    const savedTheme = localStorage.getItem("LYCEUM_THEME");
+    if (savedTheme === "light") {
+      document.body.classList.add("light-mode");
+      themeLabel.textContent = "DARK MODE";
+    }
+
+    themeToggleBtn.addEventListener("click", () => {
+      // Enable smooth transition
+      document.body.classList.add("theme-transitioning");
+
+      const isLight = document.body.classList.toggle("light-mode");
+      themeLabel.textContent = isLight ? "DARK MODE" : "LIGHT MODE";
+      localStorage.setItem("LYCEUM_THEME", isLight ? "light" : "dark");
+
+      // Refresh Lucide icons for the swapped sun/moon
+      if (window.lucide) window.lucide.createIcons();
+
+      // Remove transition class after animation completes
+      setTimeout(() => {
+        document.body.classList.remove("theme-transitioning");
+      }, 500);
+    });
+
     // Direct Bento profile edit trigger
     const bentoAdminEditBtn = document.getElementById("bento-admin-edit-btn");
     if (bentoAdminEditBtn) {
