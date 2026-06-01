@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lyceum Global Holdings Modernized Portal. A premium, interactive spatial bento dashboard outlining core global sectors, subsidiaries, financials, and ESG leadership profiles.">
+  <title>Lyceum Global Holdings - Modernized Corporate Portal</title>
+  
+  <!-- Premium Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Chart.js CDN for High-End Financial Visuals -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Main Styling -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Dynamic Starry & Mesh Background -->
+  <div class="backdrop-wrapper">
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+    <div class="cyber-grid"></div>
+    <div class="scanlines"></div>
+  </div>
+
+  <!-- HUD Interface Header -->
+  <header class="hud-header">
+    <div class="hud-brand" id="hud-brand-logo">
+      <div class="hud-logo-icon">
+        <img src="assets/logo-lgh.png" style="width: 100%; height: 100%; object-fit: contain;" alt="LGH Logo">
+      </div>
+      <div class="hud-logo-text">
+        <span class="hud-title">LYCEUM</span>
+        <span class="hud-subtitle">GLOBAL HOLDINGS</span>
+      </div>
+    </div>
+    
+    <!-- Dynamic Navigation Breadcrumbs -->
+    <div class="hud-nav" id="hud-breadcrumbs">
+      <span class="crumb active" id="crumb-root">PORTAL</span>
+    </div>
+    
+    <!-- HUD Controls -->
+    <div class="hud-controls">
+      <button class="btn-hud-control" id="btn-toggle-3d" aria-label="Toggle 3D Hierarchy Map">
+        <i data-lucide="compass"></i>
+        <span>3D HIERARCHY</span>
+      </button>
+      <button class="btn-hud-control" id="btn-admin-portal" aria-label="Toggle Administrative Panel">
+        <i data-lucide="lock"></i>
+        <span>ADMIN PORTAL</span>
+      </button>
+    </div>
+
+    <div class="hud-status">
+      <div class="status-indicator">
+        <span class="pulse-dot"></span>
+        <span class="status-label monospace">[SYS_SEC // NOMINAL]</span>
+      </div>
+      <div class="status-telemetry monospace">
+        <span class="telemetry-label">LATENCY:</span> <span class="telemetry-value">12ms</span>
+        <span class="telemetry-divider">|</span>
+        <span class="telemetry-label">STB:</span> <span class="telemetry-value">100%</span>
+      </div>
+      <div class="clock-display monospace" id="hud-clock">00:00:00 UTC</div>
+    </div>
+  </header>
+
+  <!-- Main Viewport Arena -->
+  <main class="viewport-arena" id="viewport-arena">
+
+    <!-- LEVEL 0: Portal Enter Card -->
+    <section class="view-layer layer-active" id="view-enter">
+      <div class="enter-card-container">
+        <div class="enter-card">
+          <div class="card-glow-element"></div>
+          
+          <div class="enter-logo-wrapper">
+            <div class="enter-logo-geometric">
+              <div class="ring-outer"></div>
+              <div class="ring-inner"></div>
+              <div class="ring-core"></div>
+            </div>
+          </div>
+          
+          <h1 class="enter-title">LYCEUM</h1>
+          <p class="enter-tagline">SHAPING THE NEXT HORIZON</p>
+          
+          <div class="enter-divider"></div>
+          
+          <p class="enter-description">
+            Access the unified multi-sector corporate network of Lyceum Global Holdings. Monitor high-performance assets, global financial pipelines, and ESG sustainable impact matrices across international sectors.
+          </p>
+          
+          <button class="btn-enter" id="btn-portal-enter" aria-label="Enter corporate portal">
+            <span class="btn-glow"></span>
+            <span class="btn-text">ENTER SECURE PORTAL</span>
+            <i data-lucide="arrow-right" class="btn-icon"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL 1 & 2: Radial Spatial Orbital Ring -->
+    <section class="view-layer" id="view-orbitals">
+      
+      <!-- SVG Canvas to draw laser connector lines between central card and orbiting nodes -->
+      <svg class="connector-canvas" id="connector-svg-canvas"></svg>
+
+      <div class="orbital-arena-wrapper">
+        
+        <!-- Central Hub Node -->
+        <div class="orbital-central-hub" id="orbital-hub">
+          <div class="hub-ring-glowing"></div>
+          <!-- Concentric Futuristic Rotating Tech Rings -->
+          <div class="reactor-ring reactor-ring-outer"></div>
+          <div class="reactor-ring reactor-ring-inner"></div>
+          <div class="hub-card-content">
+            <div class="hub-icon-container" id="hub-icon-container">
+              <i data-lucide="shield" id="hub-main-icon"></i>
+            </div>
+            <h2 class="hub-title" id="hub-display-name">LYCEUM</h2>
+            <p class="hub-subtitle" id="hub-display-type">GLOBAL HOLDINGS</p>
+            <div class="hub-telemetry monospace" id="hub-telemetry-sub">[SYS_LNK // STABLE]</div>
+          </div>
+        </div>
+
+        <!-- Surrounding Nodes Container (Sectors or Companies populate here) -->
+        <div class="orbital-nodes-wrapper" id="orbital-nodes-container">
+          <!-- Dynamic nodes generated via Javascript will slide in radially -->
+        </div>
+
+      </div>
+
+      <!-- Action Panel Float -->
+      <div class="spatial-hud-controls">
+        <button class="hud-control-btn" id="btn-spatial-back" disabled aria-label="Go back one level">
+          <i data-lucide="chevron-left"></i>
+          <span>NAV BACK</span>
+        </button>
+        <span class="spatial-level-indicator" id="spatial-step-label">LEVEL 1 // SECTOR NETWORKS</span>
+      </div>
+    </section>
+
+    <!-- LEVEL 3: Double-Column Glassmorphic Bento Profile Sheet -->
+    <section class="view-layer" id="view-bento-overlay">
+      <div class="bento-container-scroll">
+        <div class="bento-inner-wrapper">
+          
+          <!-- Bento Header Row -->
+          <div class="bento-header">
+            <div class="bento-title-block">
+              <span class="company-badge" id="bento-sector-badge">TECHNOLOGY & AI</span>
+              <h2 class="company-title" id="bento-comp-name">Lyceum Cognitive Labs</h2>
+              <p class="company-tagline" id="bento-comp-tagline">Enterprise Neuro-Computing & AI Systems</p>
+              <a href="#" target="_blank" class="company-website-link" id="bento-comp-website">
+                <i data-lucide="external-link"></i>
+                <span>VISIT OFFICIAL WEBSITE</span>
+              </a>
+              <button class="company-edit-profile-btn" id="bento-admin-edit-btn" style="display: none;">
+                <i data-lucide="edit-3"></i>
+                <span>EDIT PROFILE</span>
+              </button>
+            </div>
+            <button class="btn-close-bento" id="btn-close-bento" aria-label="Close detailed profile">
+              <i data-lucide="x"></i>
+              <span>CLOSE</span>
+            </button>
+          </div>
+
+          <!-- The Bento Grid Structure -->
+          <div class="bento-grid">
+            
+            <!-- Box 1: Core Corporate Mission & Info (Glass highlight) -->
+            <div class="bento-box box-double box-glass" id="bento-box-info">
+              <div class="box-header">
+                <i data-lucide="info" class="box-icon icon-cyan"></i>
+                <h3>BUSINESS PROFILE</h3>
+              </div>
+              <div class="box-body">
+                <p class="bento-description-text" id="bento-comp-desc">
+                  Loading detailed strategic overview...
+                </p>
+                <div class="corporate-meta-specs">
+                  <div class="spec-card">
+                    <span class="spec-label"><i data-lucide="map-pin"></i> HEADQUARTERS</span>
+                    <span class="spec-value" id="bento-spec-location">San Jose, CA, USA</span>
+                  </div>
+                  <div class="spec-card">
+                    <span class="spec-label"><i data-lucide="users"></i> WORKFORCE</span>
+                    <span class="spec-value" id="bento-spec-workforce">4,200 Experts</span>
+                  </div>
+                  <div class="spec-card">
+                    <span class="spec-label"><i data-lucide="globe"></i> EST. VALUE</span>
+                    <span class="spec-value" id="bento-spec-revenue">$1.45 Billion</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Box 2: Financial Charts (Wide Canvas Node) -->
+            <div class="bento-box box-double" id="bento-box-financials">
+              <div class="box-header flex-header">
+                <div class="header-left">
+                  <i data-lucide="trending-up" class="box-icon icon-violet"></i>
+                  <h3>FINANCIAL HORIZON</h3>
+                </div>
+                <span class="graph-indicator">REVENUE IN USD (MILLIONS)</span>
+              </div>
+              <div class="box-body chart-wrapper">
+                <canvas id="bento-financial-chart"></canvas>
+              </div>
+            </div>
+
+            <!-- Box 3: ESG Metrics (Sustainability Pulse) -->
+            <div class="bento-box box-single" id="bento-box-esg">
+              <div class="box-header">
+                <i data-lucide="leaf" class="box-icon icon-emerald"></i>
+                <h3>SUSTAINABILITY INDEX</h3>
+              </div>
+              <div class="box-body esg-layout">
+                <div class="esg-score-display">
+                  <div class="esg-circle">
+                    <svg class="progress-ring" width="100" height="100">
+                      <circle class="progress-ring-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="6" fill="transparent" r="40" cx="50" cy="50"/>
+                      <circle class="progress-ring-fg" id="esg-progress-circle" stroke="#10b981" stroke-width="6" fill="transparent" r="40" cx="50" cy="50"/>
+                    </svg>
+                    <div class="esg-value" id="bento-esg-average">91</div>
+                  </div>
+                  <span class="esg-grade">RATED: OUTSTANDING (AAA)</span>
+                </div>
+                
+                <div class="esg-breakdown">
+                  <div class="esg-bar-group">
+                    <div class="bar-labels">
+                      <span>ENVIRONMENTAL</span>
+                      <span id="bento-esg-e">92%</span>
+                    </div>
+                    <div class="bar-track">
+                      <div class="bar-fill bg-cyan" id="bento-esg-e-bar" style="width: 92%"></div>
+                    </div>
+                  </div>
+                  <div class="esg-bar-group">
+                    <div class="bar-labels">
+                      <span>SOCIAL JUSTICE</span>
+                      <span id="bento-esg-s">88%</span>
+                    </div>
+                    <div class="bar-track">
+                      <div class="bar-fill bg-violet" id="bento-esg-s-bar" style="width: 88%"></div>
+                    </div>
+                  </div>
+                  <div class="esg-bar-group">
+                    <div class="bar-labels">
+                      <span>GOVERNANCE</span>
+                      <span id="bento-esg-g">95%</span>
+                    </div>
+                    <div class="bar-track">
+                      <div class="bar-fill bg-yellow" id="bento-esg-g-bar" style="width: 95%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Box 4: Products & Innovations (Interactive Carousel/Cards) -->
+            <div class="bento-box box-single" id="bento-box-products">
+              <div class="box-header">
+                <i data-lucide="package" class="box-icon icon-yellow"></i>
+                <h3>CORE CAPABILITIES</h3>
+              </div>
+              <div class="box-body products-list" id="bento-products-list">
+                <!-- Javascript will populate product items -->
+              </div>
+            </div>
+
+            <!-- Box 5: Key Executive Leadership -->
+            <div class="bento-box box-single" id="bento-box-leadership">
+              <div class="box-header">
+                <i data-lucide="users" class="box-icon icon-rose"></i>
+                <h3>SENIOR DIRECTORS</h3>
+              </div>
+              <div class="box-body leadership-deck" id="bento-leaders-list">
+                <!-- Javascript will populate executive avatars -->
+              </div>
+            </div>
+
+            <!-- Box 6: Secure Corporate Connect -->
+            <div class="bento-box box-single" id="bento-box-contact">
+              <div class="box-header">
+                <i data-lucide="shield-alert" class="box-icon icon-blue"></i>
+                <h3>EXECUTIVE CHANNEL</h3>
+              </div>
+              <div class="box-body">
+                <!-- Dynamic Company Contact Details -->
+                <div class="company-contact-panel">
+                  <div class="contact-item">
+                    <i data-lucide="phone"></i>
+                    <span id="bento-contact-phone">+94 11 767 1000</span>
+                  </div>
+                  <div class="contact-item">
+                    <i data-lucide="mail"></i>
+                    <span id="bento-contact-email">info@lyceum.lk</span>
+                  </div>
+                  <div class="contact-item">
+                    <i data-lucide="map-pin"></i>
+                    <span id="bento-contact-address">Colombo, Sri Lanka</span>
+                  </div>
+                </div>
+                <div class="contact-divider"></div>
+
+                <form class="bento-form" onsubmit="event.preventDefault(); alert('Transmission secured. Executive office will respond via encrypted channels.');">
+                  <div class="input-group">
+                    <label for="connect-email">ENCRYPTED RETURN ADDRESS</label>
+                    <input type="email" id="connect-email" placeholder="client-relay@domain.com" required>
+                  </div>
+                  <div class="input-group">
+                    <label for="connect-purpose">TRANSMISSION CLASSIFICATION</label>
+                    <select id="connect-purpose">
+                      <option value="invest">Ventures & Capital Investment</option>
+                      <option value="ma">M&A / Partnership Proposal</option>
+                      <option value="press">Press / Media Validation</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn-form-submit">
+                    <span>TRANSMIT BRIEFING</span>
+                    <i data-lucide="send"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Box 7: Enterprise System Applications (Double Width) -->
+            <div class="bento-box box-double" id="bento-box-systems">
+              <div class="box-header flex-header">
+                <div class="header-left">
+                  <i data-lucide="cpu" class="box-icon icon-cyan"></i>
+                  <h3>ENTERPRISE SYSTEMS</h3>
+                </div>
+                <span class="graph-indicator">ACTIVE APP REGISTRY</span>
+              </div>
+              <div class="box-body systems-layout">
+                <div class="systems-grid" id="bento-systems-grid">
+                  <!-- Javascript will dynamically render current applications -->
+                </div>
+                
+                <div class="add-system-wrapper">
+                  <span class="form-title">REGISTER SYSTEM UTILITY</span>
+                  <form class="bento-form add-app-form" id="form-register-app">
+                    <div class="input-group">
+                      <label for="new-app-name">APPLICATION NAME</label>
+                      <input type="text" id="new-app-name" placeholder="e.g. EduPortal, FleetRadar" required maxlength="25">
+                    </div>
+                    <button type="submit" class="btn-form-submit">
+                      <span>REGISTER APP</span>
+                      <i data-lucide="plus-circle"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+          </div> <!-- End bento grid -->
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL 4: Fullscreen 3D Spatial Hierarchy Map -->
+    <section class="view-layer" id="view-3d-hierarchy">
+      <div class="view-3d-container">
+        <!-- Close overlay button -->
+        <button class="btn-close-3d" id="btn-close-3d" aria-label="Close 3D hierarchy map">
+          <i data-lucide="x"></i>
+          <span>CLOSE 3D</span>
+        </button>
+
+        <div class="map-hud-overlay left-hud">
+          <div class="tech-spec-box">
+            <span class="spec-tag">SYSTEM MAP</span>
+            <h3>SPATIAL CONSTELLATION</h3>
+            <p>Interactive 3D structural model of Lyceum Global Holdings. Drag to rotate coordinate space. Scroll to zoom. Hover over nodes to examine telemetric data. Click a node to navigate directly.</p>
+          </div>
+
+          <div class="telemetry-specs-3d" id="hud-telemetry-3d">
+            <span class="telemetry-tag">NODE TELEMETRY</span>
+            <div class="stat-row">
+              <span class="stat-key">NAME:</span>
+              <span class="stat-val" id="node-3d-name">SELECT NODE</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-key">CLASS:</span>
+              <span class="stat-val" id="node-3d-class">-</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-key">LOC:</span>
+              <span class="stat-val" id="node-3d-loc">-</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-key">VALUE:</span>
+              <span class="stat-val" id="node-3d-val">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Canvas element -->
+        <canvas id="canvas-3d-hierarchy"></canvas>
+
+        <!-- Floating Tooltip detail card linked to selected node -->
+        <div class="spatial-detail-card" id="spatial-detail-card" style="display: none; opacity: 0;">
+          <button class="btn-close-detail-card" id="btn-close-detail-card" aria-label="Close detail card">&times;</button>
+          <div class="detail-card-content">
+            <div class="detail-card-header">
+              <div class="detail-logo-wrapper" id="detail-card-logo"></div>
+              <div class="detail-header-text">
+                <h4 id="detail-card-name">COMPANY NAME</h4>
+                <span id="detail-card-sector">SECTOR</span>
+              </div>
+            </div>
+            <div class="detail-card-body">
+              <p id="detail-card-desc">Detailed company description...</p>
+              <div class="detail-info-grid">
+                <div class="info-row">
+                  <span class="info-label">REVENUE:</span>
+                  <span class="info-value" id="detail-card-rev">-</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">LOCATION:</span>
+                  <span class="info-value" id="detail-card-loc">-</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">LEADERS:</span>
+                  <span class="info-value" id="detail-card-leaders">-</span>
+                </div>
+                <div class="info-row">
+                  <span class="info-label">ACTIVE APPS:</span>
+                  <span class="info-value" id="detail-card-apps">-</span>
+                </div>
+              </div>
+            </div>
+            <div class="detail-card-footer">
+              <button class="btn-detail-navigate" id="btn-detail-navigate">
+                <span>GO TO PROFILE</span>
+                <i data-lucide="arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-hud-overlay right-hud">
+          <div class="controls-legend-3d">
+            <span class="telemetry-tag">GRID CONTROLS</span>
+            <div class="control-key-row"><kbd>L-CLICK</kbd> <span>+ Drag to Rotate</span></div>
+            <div class="control-key-row"><kbd>WHEEL</kbd> <span>to Zoom</span></div>
+            <div class="control-key-row"><kbd>HOVER</kbd> <span>to Inspect Telemetry</span></div>
+            <div class="control-key-row"><kbd>CLICK</kbd> <span>to Navigate Node</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Passcode Verification Security Modal -->
+    <div class="hud-passcode-dialog" id="hud-passcode-dialog" style="display: none; opacity: 0;">
+      <div class="passcode-dialog-content">
+        <div class="passcode-header">
+          <span class="passcode-tag">SECURITY HANDSHAKE</span>
+          <h4>AUTHORIZE ADMINISTRATIVE ACCESS</h4>
+        </div>
+        <div class="passcode-body">
+          <p>Please enter administrative bypass key to initialize Central Control.</p>
+          <input type="password" id="admin-passcode-input" placeholder="••••••••" class="passcode-input" autocomplete="current-password">
+          <p class="passcode-error" id="passcode-error-msg" style="display: none;">ACCESS DENIED // INVALID CRYPTO KEY</p>
+        </div>
+        <div class="passcode-actions">
+          <button class="btn-passcode-cancel" id="btn-passcode-cancel">CANCEL</button>
+          <button class="btn-passcode-verify" id="btn-passcode-verify">VERIFY LOCK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEVEL 5: Fullscreen Admin Portal Dashboard Overlay -->
+    <div class="view-layer" id="view-admin-portal" style="display: none; opacity: 0;">
+      <div class="admin-portal-container">
+        <!-- Close overlay button -->
+        <button class="btn-close-admin" id="btn-close-admin" aria-label="Close Admin Portal">
+          <i data-lucide="x"></i>
+          <span>CLOSE SYSTEM CONTROL</span>
+        </button>
+
+        <header class="admin-header">
+          <div class="admin-branding">
+            <span class="admin-tag">LYCEUM CONGLOMERATE SYSTEM MANAGEMENT</span>
+            <h2>CENTRAL ADMINISTRATIVE CORE</h2>
+          </div>
+          <div class="admin-status">
+            <span class="status-indicator"></span>
+            <span class="status-text" id="admin-status-label">ADMIN AUTHORIZED</span>
+          </div>
+        </header>
+
+        <div class="admin-tabs">
+          <button class="admin-tab-btn active" data-tab="companies">COMPANY DIRECTORY</button>
+          <button class="admin-tab-btn" data-tab="systems">MASTER SOFTWARE DATABASE</button>
+          <button class="admin-tab-btn" data-tab="assignments">SOFTWARE ASSIGNMENTS</button>
+        </div>
+
+        <div class="admin-content-area">
+          <!-- Tab 1: Company Directory Editor -->
+          <div class="admin-tab-content active" id="tab-admin-companies">
+            <div class="admin-editor-layout">
+              <!-- Company Selector list -->
+              <div class="admin-side-panel">
+                <span class="editor-sub-tag">SELECT SUBSIDIARY</span>
+                <div class="editor-list" id="admin-company-list">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+              <!-- Editor Form -->
+              <div class="admin-main-panel">
+                <span class="editor-sub-tag">METRIC COMPILER</span>
+                <form id="admin-company-form" class="editor-form">
+                  <div class="form-row double">
+                    <div class="form-group">
+                      <label for="edit-comp-name">Company Name</label>
+                      <input type="text" id="edit-comp-name" required class="admin-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="edit-comp-tagline">Tagline</label>
+                      <input type="text" id="edit-comp-tagline" class="admin-input">
+                    </div>
+                  </div>
+                  
+                  <div class="form-row double">
+                    <div class="form-group">
+                      <label for="edit-comp-location">Location Address</label>
+                      <input type="text" id="edit-comp-location" class="admin-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="edit-comp-revenue">Revenue Metric</label>
+                      <input type="text" id="edit-comp-revenue" class="admin-input">
+                    </div>
+                  </div>
+
+                  <div class="form-row double">
+                    <div class="form-group">
+                      <label for="edit-comp-employees">Headcount / Employees</label>
+                      <input type="text" id="edit-comp-employees" class="admin-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="edit-comp-website">Website URL</label>
+                      <input type="url" id="edit-comp-website" class="admin-input">
+                    </div>
+                  </div>
+
+                  <div class="form-group full">
+                    <label for="edit-comp-profile">Detailed Corporate Profile</label>
+                    <textarea id="edit-comp-profile" rows="3" class="admin-textarea"></textarea>
+                  </div>
+
+                  <div class="form-group full">
+                    <label for="edit-comp-leaders">Executive Leadership (JSON Array Format)</label>
+                    <textarea id="edit-comp-leaders" rows="3" class="admin-textarea monospace" placeholder='[{"name": "Name", "role": "Role", "avatar": "👨"}]'></textarea>
+                  </div>
+
+                  <button type="submit" class="btn-editor-submit">
+                    <i data-lucide="save"></i>
+                    <span>COMPILE CHANGES</span>
+                  </button>
+                  <div class="save-toast" id="save-toast-msg" style="display: none;">METRICS COMPILED SUCCESSFULLY</div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 2: Master Software Database -->
+          <div class="admin-tab-content" id="tab-admin-systems">
+            <div class="admin-systems-layout">
+              <!-- Current Master list -->
+              <div class="admin-side-panel">
+                <span class="editor-sub-tag">GLOBAL INVENTORY DATABASE</span>
+                <div class="systems-db-list" id="admin-master-systems-list">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+              <!-- Create new Software System -->
+              <div class="admin-main-panel">
+                <span class="editor-sub-tag">REGISTER GLOBAL SYSTEM UTILITY</span>
+                <form id="admin-system-create-form" class="editor-form">
+                  <div class="form-group">
+                    <label for="new-system-name">System / Application Name</label>
+                    <input type="text" id="new-system-name" required placeholder="e.g. SAP S/4HANA ERP" class="admin-input">
+                  </div>
+                  
+                  <div class="form-row double">
+                    <div class="form-group">
+                      <label for="new-system-category">Category / Sector Layer</label>
+                      <select id="new-system-category" class="admin-select">
+                        <option value="Core ERP">Core ERP</option>
+                        <option value="Customer Relations">Customer Relations</option>
+                        <option value="Collaboration">Collaboration</option>
+                        <option value="Database/Cloud">Database/Cloud</option>
+                        <option value="Education Utilities">Education Utilities</option>
+                        <option value="Logistics Software">Logistics Software</option>
+                        <option value="Industrial Management">Industrial Management</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="new-system-id">System Identifier (Slug ID)</label>
+                      <input type="text" id="new-system-id" required placeholder="e.g. sap-erp" class="admin-input">
+                    </div>
+                  </div>
+
+                  <div class="form-group full">
+                    <label for="new-system-desc">Functional Description</label>
+                    <textarea id="new-system-desc" rows="3" placeholder="Describe the purpose, utility class, and licensing of this software." class="admin-textarea"></textarea>
+                  </div>
+
+                  <button type="submit" class="btn-editor-submit">
+                    <i data-lucide="plus-circle"></i>
+                    <span>REGISTER SYSTEM IN CORPORATE INVENTORY</span>
+                  </button>
+                  <div class="save-toast" id="system-toast-msg" style="display: none;">SYSTEM UTILITY REGISTERED SUCCESSFULLY</div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab 3: Software Assignments Manager -->
+          <div class="admin-tab-content" id="tab-admin-assignments">
+            <div class="admin-assignments-layout">
+              <!-- Selected company -->
+              <div class="admin-side-panel">
+                <span class="editor-sub-tag">CHOOSE TARGET SUBSIDIARY</span>
+                <div class="editor-list" id="admin-assignment-company-list">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+              <!-- Assignments list checkboxes -->
+              <div class="admin-main-panel">
+                <div class="assignment-header-meta">
+                  <span class="editor-sub-tag">ASSIGN SYSTEM UTILITIES</span>
+                  <h3 id="assignment-target-company-name">NO COMPANY SELECTED</h3>
+                </div>
+                
+                <div class="assignments-check-grid" id="admin-assignments-check-grid">
+                  <!-- Dynamically populated checkboxes of all master systems -->
+                </div>
+                
+                <button class="btn-editor-submit" id="btn-save-assignments" style="margin-top: 20px;">
+                  <i data-lucide="check-circle"></i>
+                  <span>COMPILE SYSTEM ASSIGNMENTS</span>
+                </button>
+                <div class="save-toast" id="assign-toast-msg" style="display: none;">ASSIGNMENTS REGISTERED SUCCESSFULLY</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Database & Logic Layers -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
