@@ -1369,9 +1369,13 @@ document.addEventListener("DOMContentLoaded", () => {
       // Set high-visibility depthFactor with minimum 35% opacity
       const depthFactor = Math.max(0.35, Math.min(1.0, 1 - (conn.depth - 250) / 600));
       
+      // Determine if this connection line is connected to the selected node
+      const isConnected = !selectedNode3D || (p.id === selectedNode3D.id || c.id === selectedNode3D.id);
+      const fadeMultiplier = isConnected ? 1.0 : 0.15;
+      
       // Connection line style and colors matching the node sector for high visibility
       const strokeColor = c.color;
-      const opacityGlow = depthFactor * (c.type === "sector" ? 0.6 : 0.4);
+      const opacityGlow = depthFactor * (c.type === "sector" ? 0.6 : 0.4) * fadeMultiplier;
       
       // 1. Draw glowing background connecting line
       ctx3D.beginPath();
@@ -1386,7 +1390,9 @@ document.addEventListener("DOMContentLoaded", () => {
       ctx3D.beginPath();
       ctx3D.moveTo(p.projX, p.projY);
       ctx3D.lineTo(c.projX, c.projY);
-      ctx3D.strokeStyle = isLightMode ? strokeColor : "#ffffff";
+      ctx3D.strokeStyle = isLightMode 
+        ? strokeColor 
+        : (isConnected ? "#ffffff" : "rgba(255, 255, 255, 0.1)");
       ctx3D.lineWidth = Math.max(0.8, (c.type === "sector" ? 1.5 : 0.8) * c.projScale / 2.5);
       ctx3D.setLineDash([8, 12]);
       ctx3D.lineDashOffset = window.dashOffset3D * (c.type === "sector" ? 1.5 : 1.0);
@@ -1407,10 +1413,18 @@ document.addEventListener("DOMContentLoaded", () => {
       // Set high-visibility depthFactor with minimum 35% opacity
       const depthFactor = Math.max(0.35, Math.min(1.0, 1 - (node.depth - 250) / 600));
       
+      // Determine if node is connected to the selected node
+      const isNodeConnected = !selectedNode3D || (
+        node.id === selectedNode3D.id || 
+        (node.parent && node.parent.id === selectedNode3D.id) || 
+        (selectedNode3D.parent && node.id === selectedNode3D.parent.id)
+      );
+      const nodeFadeMultiplier = isNodeConnected ? 1.0 : 0.3;
+      
       // Draw dynamic glowing aura
       ctx3D.beginPath();
       ctx3D.arc(node.projX, node.projY, radius * (isHovered ? 2.5 : 1.8), 0, 2 * Math.PI);
-      ctx3D.fillStyle = node.color + Math.floor(depthFactor * (isHovered ? 85 : 40)).toString(16).padStart(2,'0');
+      ctx3D.fillStyle = node.color + Math.floor(depthFactor * (isHovered ? 85 : 40) * nodeFadeMultiplier).toString(16).padStart(2,'0');
       ctx3D.fill();
       
       // Center solid core circle
@@ -1419,7 +1433,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (isHovered) {
         ctx3D.fillStyle = isLightMode ? "#4f46e5" : "#ffffff";
       } else {
-        ctx3D.fillStyle = node.color + Math.floor(depthFactor * 255).toString(16).padStart(2,'0');
+        ctx3D.fillStyle = node.color + Math.floor(depthFactor * 255 * (isNodeConnected ? 1.0 : 0.4)).toString(16).padStart(2,'0');
       }
       ctx3D.fill();
       
@@ -1428,13 +1442,13 @@ document.addEventListener("DOMContentLoaded", () => {
       ctx3D.strokeStyle = isHovered 
         ? node.color 
         : (isLightMode 
-            ? "rgba(75, 85, 99, " + (depthFactor * 0.4) + ")" 
-            : "rgba(255, 255, 255, " + (depthFactor * 0.3) + ")");
+            ? "rgba(75, 85, 99, " + (depthFactor * 0.4 * nodeFadeMultiplier) + ")" 
+            : "rgba(255, 255, 255, " + (depthFactor * 0.3 * nodeFadeMultiplier) + ")");
       ctx3D.stroke();
       
       // Monospace spatial labels
       if (node.projScale > 0.85 || isHovered || node.type === "holding" || node.type === "sector") {
-        const labelOpacity = Math.max(0, depthFactor * (isHovered ? 1.0 : (node.type === "holding" ? 0.95 : 0.65)));
+        const labelOpacity = Math.max(0, depthFactor * (isHovered ? 1.0 : (node.type === "holding" ? 0.95 : 0.65)) * nodeFadeMultiplier);
         if (labelOpacity > 0.1) {
           ctx3D.fillStyle = isLightMode 
             ? `rgba(15, 23, 42, ${labelOpacity})` 
