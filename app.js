@@ -489,6 +489,9 @@ document.addEventListener("DOMContentLoaded", () => {
       
       updateBreadcrumbs();
       renderSectorsRing();
+      if (!laserLoopId) {
+        laserLoopId = requestAnimationFrame(tickLasers);
+      }
     } 
     else if (level === 2) {
       // LEVEL 2: Companies Ring within Active Sector
@@ -500,6 +503,9 @@ document.addEventListener("DOMContentLoaded", () => {
       
       updateBreadcrumbs();
       renderCompaniesRing();
+      if (!laserLoopId) {
+        laserLoopId = requestAnimationFrame(tickLasers);
+      }
     } 
     else if (level === 3) {
       // LEVEL 3: Bento Detailed Company Overlay
@@ -709,7 +715,7 @@ document.addEventListener("DOMContentLoaded", () => {
       shadowLine.setAttribute("stroke-width", "5");
       shadowLine.setAttribute("opacity", "0.15");
       shadowLine.setAttribute("class", "laser-shadow-line");
-      shadowLine.style.transition = "all 0.3s ease";
+      shadowLine.style.transition = "stroke-width 0.3s ease, opacity 0.3s ease, stroke 0.3s ease";
       
       // Active core neon data stream (scrolling)
       const coreLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -722,12 +728,65 @@ document.addEventListener("DOMContentLoaded", () => {
       coreLine.setAttribute("opacity", "0.55");
       coreLine.setAttribute("stroke-dasharray", "8 16");
       coreLine.setAttribute("class", "laser-core-line active-laser-pulse");
-      coreLine.style.transition = "all 0.3s ease";
+      coreLine.style.transition = "stroke-width 0.3s ease, opacity 0.3s ease, stroke 0.3s ease";
 
       g.appendChild(shadowLine);
       g.appendChild(coreLine);
       DOM.svgCanvas.appendChild(g);
     });
+  }
+
+  // --- REAL-TIME POSITION UPDATER ---
+  function updateLaserPositions() {
+    if (window.innerWidth <= 768) {
+      DOM.svgCanvas.innerHTML = "";
+      return;
+    }
+
+    const nodes = DOM.nodesContainer.querySelectorAll(".orbital-node");
+    if (nodes.length === 0) return;
+
+    const canvasRect = DOM.svgCanvas.getBoundingClientRect();
+    const hubRect = DOM.orbitalHub.getBoundingClientRect();
+    
+    // Compute Hub Central point relative to canvas
+    const hubX = hubRect.left - canvasRect.left + hubRect.width / 2;
+    const hubY = hubRect.top - canvasRect.top + hubRect.height / 2;
+
+    const shadows = DOM.svgCanvas.querySelectorAll(".laser-shadow-line");
+    const cores = DOM.svgCanvas.querySelectorAll(".laser-core-line");
+
+    nodes.forEach((node, index) => {
+      const nodeRect = node.getBoundingClientRect();
+      const nodeX = nodeRect.left - canvasRect.left + nodeRect.width / 2;
+      const nodeY = nodeRect.top - canvasRect.top + nodeRect.height / 2;
+
+      const shadowLine = shadows[index];
+      const coreLine = cores[index];
+
+      if (shadowLine && coreLine) {
+        shadowLine.setAttribute("x1", hubX);
+        shadowLine.setAttribute("y1", hubY);
+        shadowLine.setAttribute("x2", nodeX);
+        shadowLine.setAttribute("y2", nodeY);
+
+        coreLine.setAttribute("x1", hubX);
+        coreLine.setAttribute("y1", hubY);
+        coreLine.setAttribute("x2", nodeX);
+        coreLine.setAttribute("y2", nodeY);
+      }
+    });
+  }
+
+  // --- LASER COORDINATE TICKER ---
+  let laserLoopId = null;
+  function tickLasers() {
+    if (STATE.currentLevel === 1 || STATE.currentLevel === 2) {
+      updateLaserPositions();
+      laserLoopId = requestAnimationFrame(tickLasers);
+    } else {
+      laserLoopId = null;
+    }
   }
 
   // --- LASER HOVER HIGHLIGHT MECHANICAL FLOW ---
