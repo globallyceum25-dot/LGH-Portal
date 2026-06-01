@@ -75,17 +75,21 @@ async function main() {
   }
 
   // 3. Upsert DNS record
+  const directConnect = process.env.CLOUDFLARE_DIRECT === "true";
+  const proxied = !directConnect;
+  console.log(`ℹ️ Mode: ${proxied ? "Cloudflare Proxied (CDN Active)" : "Direct Connect (DNS-only / Grey Cloud)"}`);
+
   const payload = {
     type: "A",
     name: RECORD_NAME,
     content: publicIp,
     ttl: 1, // Auto
-    proxied: true, // Cloudflare CDN proxy active
+    proxied: proxied,
   };
 
   if (existingRecord) {
-    if (existingRecord.content === publicIp && existingRecord.proxied === true) {
-      console.log("🎉 DNS Record is already up-to-date and proxied via Cloudflare.");
+    if (existingRecord.content === publicIp && existingRecord.proxied === proxied) {
+      console.log(`🎉 DNS Record is already up-to-date and ${proxied ? "proxied via Cloudflare" : "set to DNS-only (direct connect)"}.`);
       process.exit(0);
     }
 
@@ -106,7 +110,7 @@ async function main() {
       const data = (await res.json()) as { success: boolean; errors: any[] };
       if (res.ok && data.success) {
         console.log(`🎉 Successfully updated DNS record for ${RECORD_NAME}!`);
-        console.log("Traffic is now securely proxied through Cloudflare.");
+        console.log(proxied ? "Traffic is now securely proxied through Cloudflare." : "Traffic is now routed directly to your server's IP address (DNS-only).");
       } else {
         console.error(`❌ Failed to update DNS record: ${JSON.stringify(data.errors)}`);
         process.exit(1);
@@ -133,7 +137,7 @@ async function main() {
       const data = (await res.json()) as { success: boolean; errors: any[] };
       if (res.ok && data.success) {
         console.log(`🎉 Successfully created DNS record for ${RECORD_NAME}!`);
-        console.log("Traffic is now securely proxied through Cloudflare.");
+        console.log(proxied ? "Traffic is now securely proxied through Cloudflare." : "Traffic is now routed directly to your server's IP address (DNS-only).");
       } else {
         console.error(`❌ Failed to create DNS record: ${JSON.stringify(data.errors)}`);
         process.exit(1);
