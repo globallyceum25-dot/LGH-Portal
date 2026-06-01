@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(echo \"PATH=$PATH\"; echo \"---\"; which node npm python3 python git 2>/dev/null; echo \"---brew---\"; which brew 2>/dev/null; echo \"---ls node via common paths---\"; ls /usr/local/bin/node /opt/homebrew/bin/node 2>/dev/null; echo \"done\")",
+      "Bash(bun --version)",
+      "Bash(go version *)",
+      "Bash(bun install *)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(bun run *)",
+      "Bash(curl -s -X POST localhost:3001/api/auth/login -H 'content-type: application/json' -d '{\"email\":\"admin@lyceumglobal.com\",\"password\":\"ChangeMe!2026\"}')",
+      "Bash(awk '{print $2}')",
+      "Bash(awk '{print $2, $11, $12, $13, $14, $15}')",
+      "Bash(lsof -iTCP:3001 -sTCP:LISTEN -P -n)",
+      "Bash(bun -e ' *)",
+      "Bash(pkill -f \"scripts/dev.ts\")",
+      "Bash(pkill -f \"bun --watch server\")",
+      "Bash(pkill -f \"vite\")",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}

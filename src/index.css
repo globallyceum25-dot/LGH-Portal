@@ -1,0 +1,487 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+}
+
+/* ============================================================
+   SEMANTIC THEME TOKENS
+   Components read these via the .fx-* classes below. Switching
+   [data-theme] on <html> overrides only these variables.
+   Defaults below = "neon" so first paint is sane.
+   ============================================================ */
+:root {
+  --bg: #05070e;
+  --bg-2: #0a0f1d;
+  --surface: rgba(18, 26, 46, 0.55);
+  --surface-solid: #0e1424;
+  --surface-border: rgba(120, 160, 255, 0.18);
+  --glass-bg: rgba(16, 22, 40, 0.45);
+  --glass-blur: 16px;
+  --fg: #e7ecfb;
+  --fg-muted: #93a0c4;
+  --accent: #22d3ee;
+  --accent-2: #c026d3;
+  --accent-contrast: #04121a;
+  --glow: 0 0 24px rgba(34, 211, 238, 0.45);
+  --ring: #22d3ee;
+  --headline-gradient: linear-gradient(100deg, #22d3ee, #818cf8 45%, #e879f9);
+  --radius: 18px;
+  color-scheme: dark;
+}
+
+/* ---------- NEON CYBER ---------- */
+[data-theme="neon"] {
+  --bg: #05070e;
+  --bg-2: #0a0f1d;
+  --surface: rgba(18, 26, 46, 0.55);
+  --surface-solid: #0e1424;
+  --surface-border: rgba(120, 160, 255, 0.18);
+  --glass-bg: rgba(16, 22, 40, 0.45);
+  --glass-blur: 16px;
+  --fg: #e7ecfb;
+  --fg-muted: #93a0c4;
+  --accent: #22d3ee;
+  --accent-2: #e879f9;
+  --accent-contrast: #04121a;
+  --glow: 0 0 26px rgba(34, 211, 238, 0.45);
+  --ring: #22d3ee;
+  --headline-gradient: linear-gradient(100deg, #22d3ee, #818cf8 45%, #e879f9);
+  --radius: 18px;
+  color-scheme: dark;
+}
+
+/* ---------- AURORA GLASS ---------- */
+[data-theme="aurora"] {
+  --bg: #eef2fb;
+  --bg-2: #e6ecfb;
+  --surface: rgba(255, 255, 255, 0.55);
+  --surface-solid: #ffffff;
+  --surface-border: rgba(120, 120, 200, 0.22);
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-blur: 20px;
+  --fg: #1b2240;
+  --fg-muted: #5a6488;
+  --accent: #7c5cff;
+  --accent-2: #21b8c9;
+  --accent-contrast: #ffffff;
+  --glow: 0 12px 40px rgba(124, 92, 255, 0.25);
+  --ring: #7c5cff;
+  --headline-gradient: linear-gradient(100deg, #7c5cff, #4f7bff 45%, #21b8c9);
+  --radius: 22px;
+  color-scheme: light;
+}
+
+/* ---------- HOLOGRAPHIC MESH ---------- */
+[data-theme="holo"] {
+  --bg: #0a0613;
+  --bg-2: #120a24;
+  --surface: rgba(40, 22, 64, 0.5);
+  --surface-solid: #160c28;
+  --surface-border: rgba(220, 140, 255, 0.22);
+  --glass-bg: rgba(34, 18, 56, 0.42);
+  --glass-blur: 18px;
+  --fg: #f6ecff;
+  --fg-muted: #b69ad6;
+  --accent: #ff5fd0;
+  --accent-2: #5fd0ff;
+  --accent-contrast: #16071c;
+  --glow: 0 0 30px rgba(255, 95, 208, 0.45);
+  --ring: #ff5fd0;
+  --headline-gradient: linear-gradient(100deg, #ff5fd0, #b06bff 40%, #5fd0ff);
+  --radius: 20px;
+  color-scheme: dark;
+}
+
+/* ---------- MINIMAL MONO FUTURISM ---------- */
+[data-theme="mono"] {
+  --bg: #0b0c0e;
+  --bg-2: #111316;
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-solid: #15171b;
+  --surface-border: rgba(255, 255, 255, 0.12);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-blur: 10px;
+  --fg: #f2f3f5;
+  --fg-muted: #8b9099;
+  --accent: #d6dde6;
+  --accent-2: #6ee7b7;
+  --accent-contrast: #0b0c0e;
+  --glow: 0 0 18px rgba(110, 231, 183, 0.25);
+  --ring: #6ee7b7;
+  --headline-gradient: linear-gradient(100deg, #ffffff, #c7ccd4);
+  --radius: 12px;
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* ============================================================
+   FX COMPONENT CLASSES (theme-aware)
+   ============================================================ */
+@layer components {
+  .fx-text { color: var(--fg); }
+  .fx-muted { color: var(--fg-muted); }
+  .fx-link { color: var(--fg-muted); transition: color 0.2s ease; }
+  .fx-link:hover { color: var(--fg); }
+  .fx-link-accent:hover { color: var(--accent); }
+  .fx-accent { color: var(--accent); }
+  .fx-accent-bg { background: var(--accent); color: var(--accent-contrast); }
+  .fx-border { border-color: var(--surface-border); }
+
+  .fx-surface {
+    background: var(--surface-solid);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius);
+  }
+
+  .fx-glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.4);
+  }
+
+  /* Interactive elevated card */
+  .fx-card {
+    position: relative;
+    background: var(--glass-bg);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.3);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.3);
+    transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    overflow: hidden;
+  }
+  .fx-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    box-shadow: var(--glow);
+  }
+  /* gradient hairline on top of cards */
+  .fx-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: var(--headline-gradient);
+    opacity: 0.7;
+  }
+
+  .fx-headline {
+    background: var(--headline-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .fx-glow { box-shadow: var(--glow); }
+  .fx-glow-text { text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 60%, transparent); }
+
+  .fx-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  .fx-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: calc(var(--radius) * 0.6);
+    padding: 0.75rem 1.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent-contrast);
+    background: var(--accent);
+    border: 1px solid transparent;
+    box-shadow: var(--glow);
+    transition: transform 0.2s ease, box-shadow 0.3s ease, filter 0.2s ease;
+  }
+  .fx-btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+
+  .fx-btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: calc(var(--radius) * 0.6);
+    padding: 0.75rem 1.4rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--fg);
+    background: color-mix(in srgb, var(--fg) 6%, transparent);
+    border: 1px solid var(--surface-border);
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .fx-btn-ghost:hover {
+    background: color-mix(in srgb, var(--fg) 12%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
+  .fx-field {
+    width: 100%;
+    border-radius: calc(var(--radius) * 0.55);
+    padding: 0.65rem 0.85rem;
+    font-size: 0.875rem;
+    color: var(--fg);
+    background: color-mix(in srgb, var(--fg) 4%, transparent);
+    border: 1px solid var(--surface-border);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .fx-field::placeholder { color: var(--fg-muted); }
+  .fx-field:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+  .fx-field option { color: #111; }
+  [data-theme="neon"] .fx-field option,
+  [data-theme="holo"] .fx-field option,
+  [data-theme="mono"] .fx-field option { color: #111; background: #fff; }
+
+  /* ===== Bento layout ===== */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1rem;
+    grid-auto-rows: minmax(120px, auto);
+  }
+
+  /* Cursor-spotlight glow on hover (vars set via JS in Spotlight wrapper) */
+  .fx-spot {
+    position: relative;
+    overflow: hidden;
+  }
+  .fx-spot::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background:
+      radial-gradient(
+        300px 240px at var(--mx, 50%) var(--my, 50%),
+        color-mix(in srgb, var(--accent) 22%, transparent),
+        transparent 65%
+      );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .fx-spot:hover::before { opacity: 1; }
+  .fx-spot > * { position: relative; z-index: 2; }
+
+  /* Gradient (conic) animated border for featured/KPI tiles */
+  .fx-card-grad {
+    position: relative;
+    background: var(--surface-solid);
+    border-radius: var(--radius);
+    isolation: isolate;
+  }
+  .fx-card-grad::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--ang, 0deg),
+      color-mix(in srgb, var(--accent) 65%, transparent),
+      color-mix(in srgb, var(--accent-2) 55%, transparent),
+      color-mix(in srgb, var(--accent) 65%, transparent)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: conic-spin 8s linear infinite;
+    z-index: 0;
+  }
+  .fx-card-grad > * { position: relative; z-index: 1; }
+
+  /* Horizontal apps marquee */
+  .fx-marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .fx-marquee__track { display: flex; gap: 1rem; animation: marquee 60s linear infinite; width: max-content; }
+  .fx-marquee:hover .fx-marquee__track { animation-play-state: paused; }
+
+  /* KBD chip used in ⌘K trigger */
+  .fx-kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.5rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--fg);
+    background: color-mix(in srgb, var(--fg) 8%, transparent);
+    border: 1px solid var(--surface-border);
+  }
+}
+
+/* Bento span helpers */
+.col-span-3 { grid-column: span 3 / span 3; }
+.col-span-4 { grid-column: span 4 / span 4; }
+.col-span-5 { grid-column: span 5 / span 5; }
+.col-span-6 { grid-column: span 6 / span 6; }
+.col-span-7 { grid-column: span 7 / span 7; }
+.col-span-8 { grid-column: span 8 / span 8; }
+.col-span-12 { grid-column: span 12 / span 12; }
+.row-span-2 { grid-row: span 2 / span 2; }
+
+/* Keyframes added for the new components */
+@keyframes conic-spin { to { --ang: 360deg; } }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes count-pulse { 0%,100% { opacity: 0.85; } 50% { opacity: 1; } }
+@property --ang {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* ============================================================
+   ANIMATED BACKGROUNDS (per-theme, behind all content)
+   ============================================================ */
+.fx-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg);
+}
+.fx-bg__layer { position: absolute; inset: 0; }
+
+/* NEON: perspective grid + drifting glow + scanlines */
+[data-theme="neon"] .fx-bg__grid {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--accent) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 22%, transparent) 1px, transparent 1px);
+  background-size: 46px 46px;
+  inset: -50% 0 0 0;
+  transform: perspective(420px) rotateX(58deg);
+  transform-origin: top center;
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 45%, transparent 78%);
+  animation: grid-move 9s linear infinite;
+  opacity: 0.5;
+}
+[data-theme="neon"] .fx-bg__glow,
+[data-theme="holo"] .fx-bg__glow {
+  background:
+    radial-gradient(40% 40% at 75% 15%, color-mix(in srgb, var(--accent) 40%, transparent), transparent 70%),
+    radial-gradient(45% 45% at 10% 85%, color-mix(in srgb, var(--accent-2) 38%, transparent), transparent 70%);
+  filter: blur(20px);
+  animation: glow-drift 16s ease-in-out infinite alternate;
+}
+[data-theme="neon"] .fx-bg__scan {
+  background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 3px);
+  opacity: 0.5;
+}
+
+/* AURORA: soft drifting blobs on light bg */
+[data-theme="aurora"] .fx-bg {
+  background: linear-gradient(160deg, var(--bg), var(--bg-2));
+}
+[data-theme="aurora"] .fx-bg__aurora {
+  background:
+    radial-gradient(38% 38% at 20% 25%, rgba(124,92,255,0.55), transparent 70%),
+    radial-gradient(34% 34% at 80% 20%, rgba(79,123,255,0.5), transparent 70%),
+    radial-gradient(45% 45% at 65% 80%, rgba(33,184,201,0.5), transparent 70%);
+  filter: blur(40px);
+  animation: glow-drift 20s ease-in-out infinite alternate;
+}
+
+/* HOLO: iridescent animated mesh */
+[data-theme="holo"] .fx-bg__mesh {
+  background:
+    conic-gradient(from 0deg at 30% 30%, #ff5fd0, #b06bff, #5fd0ff, #ff5fd0);
+  filter: blur(70px);
+  opacity: 0.42;
+  animation: hue 18s linear infinite, glow-drift 22s ease-in-out infinite alternate;
+}
+
+/* MONO: faint hairline grid + single moving accent line */
+[data-theme="mono"] .fx-bg__grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.6;
+}
+[data-theme="mono"] .fx-bg__glow {
+  background: radial-gradient(50% 30% at 50% 0%, color-mix(in srgb, var(--accent-2) 18%, transparent), transparent 70%);
+}
+
+@keyframes grid-move { to { background-position: 0 46px; } }
+@keyframes glow-drift {
+  0% { transform: translate3d(-3%, -2%, 0) scale(1); }
+  100% { transform: translate3d(3%, 2%, 0) scale(1.08); }
+}
+@keyframes hue { to { filter: blur(70px) hue-rotate(360deg); } }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fade-up 0.5s ease-out both; }
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* tilt card helper (driven by useTilt) */
+.fx-tilt { transform-style: preserve-3d; will-change: transform; }
+
+/* Accessible focus ring */
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .fx-bg__grid, .fx-bg__glow, .fx-bg__aurora, .fx-bg__mesh { animation: none !important; }
+  .fx-marquee__track, .fx-card-grad::before { animation: none !important; }
+  .fx-spot::before { display: none !important; }
+}

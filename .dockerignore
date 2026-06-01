@@ -1,0 +1,47 @@
+# Dependencies (re-installed in Docker)
+node_modules
+
+# Build output (rebuilt in Docker)
+dist
+
+# Version control
+.git
+.gitignore
+
+# Data / databases
+data/*.sqlite
+data/*.sqlite-*
+
+# Environment files (secrets)
+.env
+.env.*
+.env.local
+.env.production
+
+# IDE / editor
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# CI/CD
+.github
+
+# Docker (prevent recursive context)
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Logs
+*.log
+install.log
+
+# Misc
+.claude
+README.md
+LICENSE
