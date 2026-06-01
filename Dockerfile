@@ -31,9 +31,9 @@ FROM oven/bun:1-slim AS runtime
 
 WORKDIR /app
 
-# Create non-root user for security
-RUN addgroup --system --gid 1001 app && \
-    adduser --system --uid 1001 --ingroup app app
+# Create non-root user for security (adduser not available in slim image)
+RUN echo 'app:x:1001:' >> /etc/group && \
+    echo 'app:x:1001:1001:app:/app:/usr/sbin/nologin' >> /etc/passwd
 
 # Copy production node_modules
 COPY --from=deps /app/node_modules ./node_modules
@@ -58,8 +58,8 @@ ENV PORT=3001
 
 EXPOSE 3001
 
-# Health check
+# Health check (using bun fetch — curl not available in slim image)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:3001/api/health || exit 1
+  CMD bun -e "fetch('http://localhost:3001/api/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
 
 CMD ["bun", "server/index.ts"]
