@@ -44,6 +44,7 @@ export const THEMES: ThemeMeta[] = [
 
 export const THEME_IDS = THEMES.map((t) => t.id);
 const STORAGE_KEY = "lyceum_theme";
+const LAST_DARK_KEY = "lyceum_last_dark_theme";
 export const DEFAULT_THEME: ThemeId = "neon";
 
 export function readStoredTheme(): ThemeId {
@@ -52,23 +53,49 @@ export function readStoredTheme(): ThemeId {
   return v && THEME_IDS.includes(v) ? v : DEFAULT_THEME;
 }
 
+export function readStoredLastDarkTheme(): ThemeId {
+  if (typeof localStorage === "undefined") return "neon";
+  const v = localStorage.getItem(LAST_DARK_KEY) as ThemeId | null;
+  return v && THEME_IDS.includes(v) && v !== "aurora" ? v : "neon";
+}
+
 interface ThemeCtx {
   theme: ThemeId;
   setTheme: (t: ThemeId) => void;
+  mode: "light" | "dark";
+  toggleMode: () => void;
 }
 const Ctx = createContext<ThemeCtx>(null as unknown as ThemeCtx);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemeId>(() => readStoredTheme());
+  const [lastDarkTheme, setLastDarkTheme] = useState<ThemeId>(() => readStoredLastDarkTheme());
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem(STORAGE_KEY, theme);
+    if (theme !== "aurora") {
+      setLastDarkTheme(theme);
+      localStorage.setItem(LAST_DARK_KEY, theme);
+    }
   }, [theme]);
 
   const setTheme = (t: ThemeId) => setThemeState(t);
+  const toggleMode = () => {
+    if (theme === "aurora") {
+      setThemeState(lastDarkTheme);
+    } else {
+      setThemeState("aurora");
+    }
+  };
 
-  return <Ctx.Provider value={{ theme, setTheme }}>{children}</Ctx.Provider>;
+  const mode = theme === "aurora" ? "light" : "dark";
+
+  return (
+    <Ctx.Provider value={{ theme, setTheme, mode, toggleMode }}>
+      {children}
+    </Ctx.Provider>
+  );
 }
 
 export function useTheme() {

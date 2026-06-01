@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { THEMES, useTheme } from "@/lib/theme";
 
 export function ThemeSwitcher() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, mode, toggleMode } = useTheme();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -22,7 +22,7 @@ export function ThemeSwitcher() {
   const current = THEMES.find((t) => t.id === theme)!;
 
   return (
-    <div ref={ref} className="fixed bottom-5 right-5 z-50">
+    <div ref={ref} className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
       {open && (
         <div
           className="fx-glass mb-3 w-64 p-2 shadow-2xl animate-fade-up"
@@ -60,19 +60,32 @@ export function ThemeSwitcher() {
           })}
         </div>
       )}
-      <button
-        onClick={() => setOpen((o) => !o)}
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        aria-label="Switch theme"
-        className="fx-glass flex items-center gap-2.5 px-4 py-3 shadow-xl transition hover:scale-[1.03]"
-      >
-        <span
-          className="h-5 w-5 rounded-md ring-1 ring-white/20"
-          style={{ background: current.swatch }}
-        />
-        <span className="font-mono text-xs font-semibold fx-text">{current.label}</span>
-      </button>
+      <div className="flex items-center gap-2">
+        <button
+          onClick={toggleMode}
+          aria-label={mode === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          title={mode === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          className="fx-glass flex h-[46px] w-[46px] items-center justify-center shadow-xl transition hover:scale-[1.03] active:scale-95 hover:border-[color-mix(in srgb,var(--accent)_55%,transparent)]"
+        >
+          <span className="text-lg leading-none" aria-hidden>
+            {mode === "light" ? "🌙" : "☀️"}
+          </span>
+        </button>
+
+        <button
+          onClick={() => setOpen((o) => !o)}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-label="Switch theme"
+          className="fx-glass flex items-center gap-2.5 px-4 py-3 shadow-xl transition hover:scale-[1.03]"
+        >
+          <span
+            className="h-5 w-5 rounded-md ring-1 ring-white/20"
+            style={{ background: current.swatch }}
+          />
+          <span className="font-mono text-xs font-semibold fx-text">{current.label}</span>
+        </button>
+      </div>
     </div>
   );
 }

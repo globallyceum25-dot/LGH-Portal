@@ -5,6 +5,7 @@ import type { Sector } from "@shared/types";
 import { ThemeBackground } from "@/components/ThemeBackground";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { CommandPalette } from "@/components/CommandPalette";
+import { useTheme } from "@/lib/theme";
 
 interface PortalCtx {
   sectors: Sector[];
@@ -21,6 +22,7 @@ export default function PortalShell() {
   const [sectors, setSectors] = useState<Sector[]>([]);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const { pathname } = useLocation();
+  const { mode, toggleMode } = useTheme();
 
   useEffect(() => {
     api.sectors().then(setSectors).catch(() => {});
@@ -119,6 +121,15 @@ export default function PortalShell() {
             <kbd className="fx-kbd">⌘</kbd>
             <kbd className="fx-kbd">K</kbd>
           </span>
+        </button>
+
+        <button
+          onClick={toggleMode}
+          aria-label={mode === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          title={mode === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          className="fx-btn-ghost !h-8 !w-8 !p-0 rounded-full flex items-center justify-center text-sm transition hover:scale-[1.05] hover:border-[color-mix(in srgb,var(--accent)_45%,transparent)]"
+        >
+          {mode === "light" ? "🌙" : "☀️"}
         </button>
 
         <Link to="/admin" className="fx-btn-ghost !px-3 !py-1.5 text-xs">

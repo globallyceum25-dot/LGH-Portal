@@ -3,6 +3,7 @@ import { useAuth } from "@/lib/auth";
 import { Spinner } from "@/components/States";
 import { ThemeBackground } from "@/components/ThemeBackground";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
+import { useTheme } from "@/lib/theme";
 
 const LINKS = [
   { to: "/admin", label: "Dashboard", end: true, icon: "▦" },
@@ -13,6 +14,7 @@ const LINKS = [
 export default function AdminLayout() {
   const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
+  const { mode, toggleMode } = useTheme();
 
   if (loading) return <Spinner label="Authenticating…" />;
   if (!user) {
@@ -44,10 +46,20 @@ export default function AdminLayout() {
           ))}
         </nav>
         <div className="border-t fx-border p-3">
-          <Link to="/" className="block rounded-lg px-3 py-2 text-sm fx-link">← View site</Link>
+          <div className="flex items-center justify-between mb-1">
+            <Link to="/" className="rounded-lg px-3 py-2 text-sm fx-link flex-1">← View site</Link>
+            <button
+              onClick={toggleMode}
+              aria-label={mode === "light" ? "Switch to dark mode" : "Switch to light mode"}
+              title={mode === "light" ? "Switch to dark mode" : "Switch to light mode"}
+              className="fx-btn-ghost !h-8 !w-8 !p-0 rounded-full flex items-center justify-center text-sm transition hover:scale-[1.05]"
+            >
+              {mode === "light" ? "🌙" : "☀️"}
+            </button>
+          </div>
           <button
             onClick={() => { logout(); navigate("/admin/login"); }}
-            className="mt-1 block w-full rounded-lg px-3 py-2 text-left text-sm"
+            className="block w-full rounded-lg px-3 py-2 text-left text-sm"
             style={{ color: "#f87171" }}
           >
             Sign out
