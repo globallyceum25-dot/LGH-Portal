@@ -2,7 +2,7 @@
 // The API always binds to API_PORT (default 3001); Vite uses the remaining
 // PORT (default 5173). We override any inherited PORT so the two never collide.
 const API_PORT = process.env.API_PORT ?? "3001";
-const WEB_PORT = process.env.PORT ?? "5173";
+const WEB_PORT = process.env.PORT ?? "3002";
 
 const BUN = process.argv[0];
 

@@ -41,6 +41,7 @@ export interface Company {
   status: CompanyStatus;
   featured: boolean;
   logo_seed: string; // deterministic seed for the generated logo mark
+  logo: string; // public path or URL to the real logo image (empty = use generated mark)
   created_at: string;
   updated_at: string;
   /** Populated on detail/list endpoints via JOIN. */

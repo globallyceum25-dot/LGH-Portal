@@ -139,7 +139,7 @@ function BentoHome() {
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <div className="flex items-start gap-3">
-                  <LogoMark name={featured.name} seed={featured.logo_seed} size={48} />
+                  <LogoMark name={featured.name} seed={featured.logo_seed} logo={featured.logo} size={48} />
                   <div className="min-w-0">
                     <h3 className="font-display text-xl font-semibold fx-text truncate">{featured.name}</h3>
                     <p className="text-sm font-medium fx-accent truncate">{featured.sector_name}</p>
@@ -257,7 +257,7 @@ function BentoHome() {
                     to={`/portal/${c.sector_slug}/${c.slug}`}
                     className="flex items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-white/5"
                   >
-                    <LogoMark name={c.name} seed={c.logo_seed} size={36} />
+                    <LogoMark name={c.name} seed={c.logo_seed} logo={c.logo} size={36} />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-medium fx-text">{c.name}</span>
                       <span className="block truncate font-mono text-[11px] fx-muted">{c.sector_name}</span>

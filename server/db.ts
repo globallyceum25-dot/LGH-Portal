@@ -46,6 +46,7 @@ export function migrate(): void {
       status       TEXT NOT NULL DEFAULT 'active',
       featured     INTEGER NOT NULL DEFAULT 0,
       logo_seed    TEXT NOT NULL DEFAULT '',
+      logo         TEXT NOT NULL DEFAULT '',
       created_at   TEXT NOT NULL DEFAULT (datetime('now')),
       updated_at   TEXT NOT NULL DEFAULT (datetime('now'))
     );

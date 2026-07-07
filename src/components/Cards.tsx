@@ -52,7 +52,7 @@ export function CompanyCard({ company, to }: { company: Company; to?: string }) 
         </div>
         <div className="flex flex-1 flex-col p-6 pt-0">
           <div className="-mt-7 mb-3">
-            <LogoMark name={company.name} seed={company.logo_seed} size={52} />
+            <LogoMark name={company.name} seed={company.logo_seed} logo={company.logo} size={52} />
           </div>
           <h3 className="font-display text-lg font-semibold fx-text">{company.name}</h3>
           <p className="mt-1 line-clamp-2 text-sm leading-relaxed fx-muted">{company.tagline}</p>

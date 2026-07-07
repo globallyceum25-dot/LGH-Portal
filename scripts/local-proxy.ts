@@ -4,7 +4,7 @@
 import { serve } from "bun";
 
 const PORT = 80;
-const VITE_PORT = 5173;
+const VITE_PORT = 3002;
 const API_PORT = 3001;
 
 const VITE_TARGET = `http://localhost:${VITE_PORT}`;

@@ -351,6 +351,7 @@ function upsertCompanyBody(b: any, existing?: any) {
     ceo: b.ceo ?? existing?.ceo ?? "",
     status: b.status ?? existing?.status ?? "active",
     featured: (b.featured ?? existing?.featured) ? 1 : 0,
+    logo: b.logo ?? existing?.logo ?? "",
   };
 }
 
@@ -367,13 +368,13 @@ add(
         .prepare(
           `INSERT INTO companies
             (slug,name,sector_id,legal_name,tagline,overview,mission,products,founded_year,
-             headquarters,country,employees,revenue,website,email,phone,ceo,status,featured,logo_seed)
-           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+             headquarters,country,employees,revenue,website,email,phone,ceo,status,featured,logo_seed,logo)
+           VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
         )
         .run(
           v.slug, v.name, v.sector_id, v.legal_name, v.tagline, v.overview, v.mission,
           v.products, v.founded_year, v.headquarters, v.country, v.employees, v.revenue,
-          v.website, v.email, v.phone, v.ceo, v.status, v.featured, v.slug,
+          v.website, v.email, v.phone, v.ceo, v.status, v.featured, v.slug, v.logo,
         );
       const row = db
         .query(COMPANY_SELECT + " WHERE c.id = ?")
@@ -398,12 +399,12 @@ add(
       `UPDATE companies SET
         slug=?,name=?,sector_id=?,legal_name=?,tagline=?,overview=?,mission=?,products=?,
         founded_year=?,headquarters=?,country=?,employees=?,revenue=?,website=?,email=?,
-        phone=?,ceo=?,status=?,featured=?,updated_at=datetime('now')
+        phone=?,ceo=?,status=?,featured=?,logo=?,updated_at=datetime('now')
        WHERE id=?`,
     ).run(
       v.slug, v.name, v.sector_id, v.legal_name, v.tagline, v.overview, v.mission,
       v.products, v.founded_year, v.headquarters, v.country, v.employees, v.revenue,
-      v.website, v.email, v.phone, v.ceo, v.status, v.featured, p.id,
+      v.website, v.email, v.phone, v.ceo, v.status, v.featured, v.logo, p.id,
     );
     const row = db.query(COMPANY_SELECT + " WHERE c.id = ?").get(p.id);
     return json(rowToCompany(row));
