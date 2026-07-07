@@ -911,6 +911,39 @@ const COMPANIES: SeedCompany[] = [
   },
 ];
 
+// Real company logos mirrored from lyceumglobal.co into /public/logos/<slug>.png
+// (see scripts/download-logos.ts). Any slug not listed here uses the generated
+// LogoMark fallback.
+const LOGOS: Record<string, string> = {
+  "lyceum-international-school": "/logos/lyceum-international-school.png",
+  "lyceum-leaf-school": "/logos/lyceum-leaf-school.png",
+  "lyceum-day-care": "/logos/lyceum-day-care.png",
+  "lyceum-campus": "/logos/lyceum-campus.png",
+  "lyceum-placements": "/logos/lyceum-placements.png",
+  "lyceum-assessments": "/logos/lyceum-assessments.png",
+  "lyceum-academy": "/logos/lyceum-academy.png",
+  "nextgen-publications": "/logos/nextgen-publications.png",
+  "ncg-automotive-solutions": "/logos/ncg-automotive-solutions.png",
+  "ncg-express": "/logos/ncg-express.png",
+  "ncg-fleet-management": "/logos/ncg-fleet-management.png",
+  "ncg-spare-parts": "/logos/ncg-spare-parts.png",
+  "the-book-studio": "/logos/the-book-studio.png",
+  "nextgen-library-solutions": "/logos/nextgen-library-solutions.png",
+  "vebuild-innovations": "/logos/vebuild-innovations.png",
+  "ncg-green-energy": "/logos/ncg-green-energy.png",
+  "nextgen-shield": "/logos/nextgen-shield.png",
+  "nextgen-facility-management": "/logos/nextgen-facility-management.png",
+  "ncg-warehouse-solutions": "/logos/ncg-warehouse-solutions.png",
+  "serengetti-property-management": "/logos/serengetti-property-management.png",
+  "lyceum-collection": "/logos/lyceum-collection.png",
+  "the-uniform-hub": "/logos/the-uniform-hub.png",
+  "lyfe-kitchen": "/logos/lyfe-kitchen.png",
+  "zeus-gymnasium": "/logos/zeus-gymnasium.png",
+  "heracle-sports": "/logos/heracle-sports.png",
+  "ncg-earth": "/logos/ncg-earth.png",
+  "heracle-care-wellness": "/logos/heracle-care-wellness.png",
+};
+
 // Connected applications each company uses. Real, plausible enterprise tools.
 const APPLICATIONS: Record<string, { name: string; url: string; category: string }[]> = {
   "lyceum-international-school": [
@@ -1113,11 +1146,11 @@ async function run() {
     `INSERT INTO companies
        (slug, name, sector_id, legal_name, tagline, overview, mission, products,
         founded_year, headquarters, country, employees, revenue, website, email,
-        phone, ceo, status, featured, logo_seed)
+        phone, ceo, status, featured, logo_seed, logo)
      VALUES
        ($slug, $name, $sector_id, $legal_name, $tagline, $overview, $mission, $products,
         $founded_year, $headquarters, $country, $employees, $revenue, $website, $email,
-        $phone, $ceo, $status, $featured, $logo_seed)`,
+        $phone, $ceo, $status, $featured, $logo_seed, $logo)`,
   );
   const insertApp = db.prepare(
     `INSERT INTO applications (company_id, name, url, description, category, sort_order)
@@ -1148,6 +1181,7 @@ async function run() {
       $status: c.status,
       $featured: c.featured ? 1 : 0,
       $logo_seed: c.slug,
+      $logo: LOGOS[c.slug] ?? "",
     });
     const companyId = Number(res.lastInsertRowid);
     (APPLICATIONS[c.slug] ?? []).forEach((a, i) => {

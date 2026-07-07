@@ -55,7 +55,7 @@ export function CompanyPanel({
       ) : (
         <div className="flex-1 overflow-y-auto p-6">
           <div className="flex items-start gap-4">
-            <LogoMark name={company.name} seed={company.logo_seed} size={64} rounded="rounded-2xl" />
+            <LogoMark name={company.name} seed={company.logo_seed} logo={company.logo} size={64} rounded="rounded-2xl" />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="font-display text-2xl font-semibold">

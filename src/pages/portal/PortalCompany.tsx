@@ -42,7 +42,7 @@ export default function PortalCompany() {
           <GeneratedArt seed={company.logo_seed || company.slug} className="h-full w-full" />
         </div>
         <div className="relative flex flex-col gap-6 p-8 sm:flex-row sm:items-center">
-          <LogoMark name={company.name} seed={company.logo_seed} size={84} rounded="rounded-2xl" />
+          <LogoMark name={company.name} seed={company.logo_seed} logo={company.logo} size={84} rounded="rounded-2xl" />
           <div className="flex-1">
             <p className="font-mono text-xs font-semibold uppercase tracking-[0.22em] fx-accent">Step 3 · Company</p>
             <div className="mt-1 flex flex-wrap items-center gap-3">

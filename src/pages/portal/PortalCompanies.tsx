@@ -59,7 +59,7 @@ function CompanyTile({ company, sector }: { company: Company; sector: Sector }) 
           </div>
           <div className="flex flex-col p-4 pt-0">
             <div className="-mt-6 mb-2">
-              <LogoMark name={company.name} seed={company.logo_seed} size={44} />
+              <LogoMark name={company.name} seed={company.logo_seed} logo={company.logo} size={44} />
             </div>
             <h3 className="font-display text-base font-semibold fx-text">{company.name}</h3>
             <p className="mt-0.5 line-clamp-2 text-xs fx-muted">{company.tagline}</p>
