@@ -5,19 +5,96 @@
       "name": "portal",
       "runtimeExecutable": "bun",
       "runtimeArgs": ["run", "dev"],
-      "port": 5173
+      "port": 3000,
+      "autoPort": true
     },
     {
       "name": "api",
       "runtimeExecutable": "bun",
       "runtimeArgs": ["run", "dev:api"],
-      "port": 3001
+      "port": 3001,
+      "autoPort": true
     },
     {
       "name": "web",
       "runtimeExecutable": "bun",
       "runtimeArgs": ["run", "dev:web"],
-      "port": 5173
+      "port": 3000,
+      "autoPort": true
+    },
+    {
+      "name": "docs",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "7788", "--directory", "/Users/staff/storesone-0c0eff8d/docs/blueprint"],
+      "port": 7788
+    },
+    {
+      "name": "clba",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "/Users/staff/Portal/clba", "run", "dev", "--", "--port", "7790", "--strictPort"],
+      "port": 7790
+    },
+    {
+      "name": "synergy-hub",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/staff/group-synergy-hub-635158f0 && bun run dev"],
+      "port": 8090,
+      "autoPort": true
+    },
+    {
+      "name": "home-chef-hq",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/staff/home-chef-hq && npm run dev"],
+      "port": 8080,
+      "autoPort": true
+    },
+    {
+      "name": "fleetone",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/staff/Portal/FleetONE && npm run dev"],
+      "port": 8080,
+      "autoPort": true
+    },
+    {
+      "name": "storesone",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/staff/Portal/storesone-0c0eff8d && bun run dev"],
+      "port": 8080,
+      "autoPort": true
+    },
+    {
+      "name": "lyceum-connect",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/staff/lyceum-connect && npx -y live-server --port=8085 --no-browser"],
+      "port": 8085,
+      "autoPort": true
+    },
+    {
+      "name": "clba-server",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/staff/Portal/clba-platform/backend && set -a && [ -f .env ] && . ./.env; set +a; go run ./cmd/server"],
+      "port": 8091,
+      "autoPort": false
+    },
+    {
+      "name": "clba-web",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/staff/Portal/clba-platform/web && npx -y live-server --port=8087 --no-browser"],
+      "port": 8087
+    },
+    {
+      "name": "ceylon-roads-united",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/staff/Portal/ceylon-roads-united && bun run dev"],
+      "port": 3000,
+      "autoPort": true
+    },
+    {
+      "name": "lyceum-connect-backend",
+      "runtimeExecutable": "sh",
+      "runtimeArgs": ["-c", "cd /Users/staff/lyceum-connect/backend && go run ./cmd/server"],
+      "port": 8090,
+      "autoPort": true
     }
   ]
 }
